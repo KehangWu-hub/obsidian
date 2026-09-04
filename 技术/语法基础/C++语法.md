@@ -7434,15 +7434,13 @@ public:
 void test01()
 {
 	// 指定NameType 为string类型，AgeType 为 int类型
-	Person<string, int>P1("孙悟空", 999);
+	Person<string, int> P1("孙悟空", 999);
 	P1.showPerson();
 }
 
 int main() {
 
 	test01();
-
-	system("pause");
 
 	return 0;
 }
@@ -7484,7 +7482,7 @@ public:
 void test01()
 {
 	// Person p("孙悟空", 1000); // 错误 类模板使用时候，不可以用自动类型推导
-	Person <string ,int>p("孙悟空", 1000); //必须使用显示指定类型的方式，使用类模板
+	Person <string ,int> p("孙悟空", 1000); //必须使用显示指定类型的方式，使用类模板
 	p.showPerson();
 }
 
@@ -7500,8 +7498,6 @@ int main() {
 	test01();
 
 	test02();
-
-	system("pause");
 
 	return 0;
 }
@@ -7566,8 +7562,6 @@ int main() {
 
 	test01();
 
-	system("pause");
-
 	return 0;
 }
 ```
@@ -7582,9 +7576,25 @@ int main() {
 
 一共有三种传入方式：
 
-1. 指定传入的类型   --- 直接显示对象的数据类型
-2. 参数模板化           --- 将对象中的参数变为模板进行传递
-3. 整个类模板化       --- 将这个对象类型 模板化进行传递
+1. 指定传入的类型   --- 直接显式写出对象的数据类型
+2. 参数模板化       --- 将对象中的参数变为模板进行传递
+3. 整个类模板化     --- 将这个对象类型 模板化进行传递
+
+三种方式的主要区别，是函数能够接收的参数范围不同：
+
+* **指定传入类型**：参数类型直接写成 `Person<string, int>&`，因此只能接收这一种类型的对象。
+* **参数模板化**：参数写成 `Person<T1, T2>&`，可以接收不同类型组合的 `Person` 对象，`T1` 和 `T2` 由编译器根据实参自动确定。
+* **整个类模板化**：参数直接写成 `T&`，可以接收任意类型的对象，但该对象必须支持函数中使用的操作，例如调用 `showPerson()`。
+
+例如传入 `Person<string, int> p` 时：
+
+```C++
+printPerson1(p); // 函数已经明确要求 Person<string, int>
+printPerson2(p); // 编译器推导出 T1 是 string、T2 是 int
+printPerson3(p); // 编译器把整个 Person<string, int> 当作 T
+```
+
+简单来说：第一种固定了完整类型，第二种只固定为 `Person` 类，第三种不固定类的类型，灵活性依次提高。
 
 **示例：**
 
@@ -12141,7 +12151,7 @@ int main() {
 
 总结：逻辑仿函数实际应用较少，了解即可
 
-## 5 STL- 常用算法
+## 5 STL 常用算法
 
 **概述**:
 
