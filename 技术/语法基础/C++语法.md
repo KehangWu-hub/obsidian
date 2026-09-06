@@ -300,7 +300,6 @@ int main() {
 	float f3 = 3e-2;  // 3 * 0.1 ^ 2
 	cout << "f3 = " << f3 << endl;
 
-
 	return 0;
 }
 ```
@@ -333,7 +332,6 @@ int main() {
 	cout << (int)ch << endl;  //查看字符a对应的ASCII码
 	ch = 97; //可以直接用ASCII给字符型变量赋值
 	cout << ch << endl;
-
 
 	return 0;
 }
@@ -905,7 +903,6 @@ if语句的三种形式
    		cout << "我考上了一本大学！！！" << endl;
    	}
 
-
    	return 0;
    }
    ```
@@ -933,7 +930,6 @@ int main() {
 	{
 		cout << "我未考上一本大学" << endl;
 	}
-
 
 	return 0;
 }
@@ -968,7 +964,6 @@ int main() {
 	{
 		cout << "我未考上本科" << endl;
 	}
-
 
 	return 0;
 }
@@ -1023,7 +1018,6 @@ int main() {
 		cout << "我未考上本科" << endl;
 	}
 
-
 	return 0;
 }
 ```
@@ -1059,7 +1053,6 @@ int main() {
 	cout << "a = " << a << endl;
 	cout << "b = " << b << endl;
 	cout << "c = " << c << endl;
-
 
 	return 0;
 }
@@ -1392,7 +1385,6 @@ int main() {
 		cout << i << endl;
 	}
 	
-
 	return 0;
 }
 ```
@@ -1430,6 +1422,80 @@ int main() {
 ```
 
 > 注意：在程序中不建议使用goto语句，以免造成程序流程混乱
+
+#### 4.3.4 return语句
+
+`return` 用于**立即结束当前函数**，并可以将一个值返回给函数的调用者。`return` 之后的语句不会继续执行。
+
+**基本语法**
+
+```cpp
+return;      // 结束不返回值的函数
+return 表达式; // 结束函数并返回一个值
+```
+
+**返回一个值**
+
+当函数的返回类型不是 `void` 时，`return` 需要提供与返回类型匹配的值。
+
+```cpp
+int add(int a, int b) {
+    return a + b;
+}
+
+int main() {
+    int result = add(10, 20);
+    std::cout << result << '\n';
+    return 0;
+}
+```
+
+`add(10, 20)` 执行到 `return a + b;` 时结束，并将计算结果 `30` 返回给调用者。
+
+> 返回类型不是 `void` 的函数，所有可能执行到的分支都应返回一个值。
+
+**提前结束函数**
+
+`void` 函数不返回值，可以使用单独的 `return;` 提前结束函数。
+
+```cpp
+void printPositive(int number) {
+    if (number <= 0) {
+        std::cout << "请输入正数" << '\n';
+        return;
+    }
+
+    std::cout << number << '\n';
+}
+```
+
+当 `number <= 0` 时，函数执行 `return;` 后立即结束，后面的输出语句不会执行。
+
+**在循环中使用 `return`**
+
+`return` 出现在循环中时，结束的是整个函数，而不只是循环。
+
+```cpp
+bool contains(const int numbers[], int length, int target) {
+    for (int i = 0; i < length; i++) {
+        if (numbers[i] == target) {
+            return true;
+        }
+    }
+
+    return false;
+}
+```
+
+找到 `target` 后会立即返回 `true`，后续循环不再执行。如果遍历结束仍未找到，则返回 `false`。
+
+**与 `break` 和 `continue` 的区别**
+
+| 语句         | 作用                  |
+| ---------- | ------------------- |
+| `continue` | 跳过本次循环的剩余部分，继续下一次循环 |
+| `break`    | 结束当前循环或 `switch`    |
+| `return`   | 结束当前函数，并可以返回一个值     |
 
 ## 5 数组
 
@@ -1930,32 +1996,170 @@ int main() {
 }
 ```
 
-### 6.7 函数的分文件编写
+### 6.7 头文件
+
+头文件通常使用 `.h` 或 `.hpp` 后缀，用来放需要在多个源文件中共享的**声明**。源文件通常使用 `.cpp` 后缀，用来放具体的**定义**。`.h` 和 `.hpp` 对 C++ 编译器没有本质区别，只是项目的命名约定不同。
+
+例如，头文件告诉编译器“有一个 `add` 函数可以调用”：
+
+```cpp
+// math_utils.h
+int add(int a, int b);
+```
+
+源文件则提供函数的具体实现：
+
+```cpp
+// math_utils.cpp
+#include "math_utils.h"
+
+int add(int a, int b) {
+    return a + b;
+}
+```
+
+#### 6.7.1 `#include` 的作用
+
+`#include` 是预处理指令。在正式编译前，预处理器会将被包含文件的内容展开到当前文件中。
+
+```cpp
+#include <iostream>      // 标准库头文件
+#include "math_utils.h" // 自己编写的头文件
+```
+
+两种写法的查找方式不同：
+
+- `<...>` 主要用于标准库或第三方库头文件，编译器会从配置好的包含路径中查找。
+- `"..."` 主要用于项目自己的头文件，通常会先从当前项目路径查找。
+
+> `#include` 不是调用或执行另一个文件，而是在编译前将其内容提供给当前源文件。
+
+#### 6.7.2 防止头文件被重复包含
+
+一个头文件可能通过不同路径被同一个 `.cpp` 文件包含多次。
+
+例如，`a.h` 包含了 `common.h`：
+
+```cpp
+// a.h
+#include "common.h"
+```
+
+`main.cpp` 又同时包含了 `a.h` 和 `common.h`：
+
+```cpp
+// main.cpp
+#include "a.h"      // 通过 a.h 间接包含 common.h
+#include "common.h" // 再次直接包含 common.h
+```
+
+预处理后，`common.h` 的内容会在 `main.cpp` 中出现两次。如果其中定义了类或结构体，就可能出现重复定义错误。
+
+**方式一：`#pragma once`**
+
+在 `common.h` 开头写入 `#pragma once`：
+
+```cpp
+// common.h
+#pragma once
+
+struct User {
+    int age;
+};
+```
+
+`#pragma once` 表示：在同一个编译单元中，该头文件只展开一次。
+
+因此，即使 `main.cpp` 通过不同路径多次包含 `common.h`，编译器也会跳过后续的重复包含，不会再次展开其内容。
+
+`#pragma once` 写法简单，并得到主流 C++ 编译器的支持。
+
+**方式二：头文件保护宏**
+
+头文件保护宏使用 `#ifndef`、`#define` 和 `#endif`：
+
+```cpp
+// common.h
+#ifndef COMMON_H
+#define COMMON_H
+
+struct User {
+    int age;
+};
+
+#endif
+```
+
+第一次包含 `common.h` 时：
+
+1. `#ifndef COMMON_H` 检查 `COMMON_H` 是否**尚未定义**。
+2. 因为它还没有定义，所以保留后面的内容。
+3. `#define COMMON_H` 定义这个宏，表示该头文件已经展开过。
+4. `#endif` 表示条件编译区域结束。
+
+再次包含 `common.h` 时，`COMMON_H` 已经定义，`#ifndef` 条件不成立，因此会跳过中间的全部内容。
+
+#### 6.7.3 头文件中适合放什么
+
+头文件中通常放：
+
+- 函数声明。
+- 类、结构体和枚举的定义。
+- 模板的声明与定义。
+- 需要共享的 `inline constexpr` 常量和 `inline` 函数。
+
+头文件中通常不放：
+
+- 普通非 `inline` 函数的定义，否则被多个 `.cpp` 包含时可能产生重复定义。
+- 普通全局变量的定义，原因同上。
+- `using namespace std;`，因为它会影响所有包含该头文件的源文件，容易造成名称冲突。
+
+头文件还应当能够被单独包含。如果声明中使用了 `std::string`，该头文件自己就应包含 `<string>`，不要依赖其他文件提前包含它。
+
+```cpp
+#pragma once
+
+#include <string>
+
+void printName(const std::string& name);
+```
+
+#### 6.7.4 从头文件到可执行程序
+
+可以将基本过程理解为：
+
+1. **预处理**：展开 `#include`，处理宏和条件编译。
+2. **编译**：每个 `.cpp` 与它包含的头文件一起组成一个编译单元，分别被编译。
+3. **链接**：将各个编译结果与所需的库组合，解析函数声明对应的定义，最终生成可执行程序。
+
+因此，头文件通常不会被单独编译。它通过 `#include` 成为某个编译单元的一部分。
+
+### 6.8 函数的分文件编写
 
 **作用：** 让代码结构更加清晰
 
 函数分文件编写一般有4个步骤
 
-1. 创建后缀名为.h的头文件  
-2. 创建后缀名为.cpp的源文件
+1. 创建后缀名为 `.h` 的头文件。
+2. 创建后缀名为 `.cpp` 的源文件。
 3. 在头文件中写函数的声明
 4. 在源文件中写函数的定义
 
 **示例：**
 
-```C++
+```cpp
 //swap.h文件
-#include<iostream>
-using namespace std;
+#pragma once
 
 //实现两个数字交换的函数声明
 void swap(int a, int b);
 
 ```
 
-```C++
+```cpp
 //swap.cpp文件
 #include "swap.h"
+#include <iostream>
 
 void swap(int a, int b)
 {
@@ -1963,12 +2167,12 @@ void swap(int a, int b)
 	a = b;
 	b = temp;
 
-	cout << "a = " << a << endl;
-	cout << "b = " << b << endl;
+	std::cout << "a = " << a << std::endl;
+	std::cout << "b = " << b << std::endl;
 }
 ```
 
-```C++
+```cpp
 //main函数文件
 #include "swap.h"
 int main() {
@@ -1976,8 +2180,7 @@ int main() {
 	int a = 100;
 	int b = 200;
 	swap(a, b);
-
-
+	
 	return 0;
 }
 
@@ -2015,7 +2218,6 @@ int main() {
 	//2、指针的使用
 	//通过*操作指针变量指向的内存
 	cout << "*p = " << *p << endl;
-
 
 	return 0;
 }
@@ -7801,86 +8003,95 @@ int main() {
 
 #### 1.3.8 类模板与友元
 
-学习目标：
+友元函数不是类的成员函数，但可以访问类的 `private` 和 `protected` 成员。在类模板中，友元函数可以在类内定义，也可以在类外定义。
 
-* 掌握类模板配合友元函数的类内和类外实现
+**类内定义**
 
-全局函数类内实现 - 直接在类内声明友元即可
+直接在类模板内声明并定义友元函数即可。编译器会针对每个 `Person` 具体类型生成对应的普通函数。
 
-全局函数类外实现 - 需要提前让编译器知道全局函数的存在
+```cpp
+#include <iostream>
 
-**示例：**
-
-```C++
-#include <string>
-
-//2、全局函数配合友元  类外实现 - 先做函数模板声明，下方在做函数模板定义，在做友元
-template<class T1, class T2> class Person;
-
-//如果声明了函数模板，可以将实现写到后面，否则需要将实现体写到类的前面让编译器提前看到
-//template<class T1, class T2> void printPerson2(Person<T1, T2> & p);
-
-template<class T1, class T2>
-void printPerson2(Person<T1, T2> & p)
-{
-	cout << "类外实现 ---- 姓名： " << p.m_Name << " 年龄：" << p.m_Age << endl;
-}
-
-template<class T1, class T2>
-class Person
-{
-	//1、全局函数配合友元   类内实现
-	friend void printPerson(Person<T1, T2> & p)
-	{
-		cout << "姓名： " << p.m_Name << " 年龄：" << p.m_Age << endl;
-	}
-
-
-	//全局函数配合友元  类外实现
-	friend void printPerson2<>(Person<T1, T2> & p);
+template <class T1, class T2>
+class Person {
+    friend void printPerson(const Person& p) {
+        std::cout << "姓名：" << p.m_Name
+                  << " 年龄：" << p.m_Age << '\n';
+    }
 
 public:
-
-	Person(T1 name, T2 age)
-	{
-		this->m_Name = name;
-		this->m_Age = age;
-	}
-
+    Person(T1 name, T2 age) {
+        m_Name = name;
+        m_Age = age;
+    }
 
 private:
-	T1 m_Name;
-	T2 m_Age;
+    T1 m_Name;
+    T2 m_Age;
+};
+```
 
+这里的 `Person` 等价于当前的 `Person<T1, T2>`。例如，实例化 `Person<std::string, int>` 时，会生成能接收该类型的 `printPerson` 函数。
+
+**类外定义**
+
+类外定义的友元函数通常也是函数模板。编译器处理 `Person` 中的友元声明时，必须已经知道 `printPerson2` 是一个函数模板，因此声明顺序是：
+
+1. 前置声明类模板。
+2. 声明函数模板。
+3. 定义类模板，并将函数模板声明为友元。
+4. 定义函数模板。
+
+```cpp
+#include <iostream>
+#include <string>
+
+// 1. 前置声明类模板
+template <class T1, class T2>
+class Person;
+
+// 2. 声明函数模板
+template <class T1, class T2>
+void printPerson2(const Person<T1, T2>& p);
+
+// 3. 定义类模板
+template <class T1, class T2>
+class Person {
+    // <> 表示这里引用的是前面声明的函数模板
+    friend void printPerson2<>(const Person<T1, T2>& p);
+
+public:
+    Person(T1 name, T2 age) {
+        m_Name = name;
+        m_Age = age;
+    }
+
+private:
+    T1 m_Name;
+    T2 m_Age;
 };
 
-//1、全局函数在类内实现
-void test01()
-{
-	Person <string, int >p("Tom", 20);
-	printPerson(p);
-}
-
-
-//2、全局函数在类外实现
-void test02()
-{
-	Person <string, int >p("Jerry", 30);
-	printPerson2(p);
+// 4. 定义函数模板
+template <class T1, class T2>
+void printPerson2(const Person<T1, T2>& p) {
+    std::cout << "姓名：" << p.m_Name
+              << " 年龄：" << p.m_Age << '\n';
 }
 
 int main() {
-
-	//test01();
-
-	test02();
-
-
-	return 0;
+    Person<std::string, int> p("Jerry", 30);
+    printPerson2(p);
+    return 0;
 }
 ```
 
-总结：建议全局函数做类内实现，用法简单，而且编译器可以直接识别
+`friend void printPerson2<>(...)` 中的 `<>` 很关键：它表示将前面已声明的 `printPerson2` 函数模板的对应实例设为友元。如果省略 `<>`，这行可能会声明一个新的普通非模板函数，而不是前面的函数模板。
+
+**两种写法的区别**
+
+- 类内定义的写法更简洁，适合实现很短的友元函数。
+- 类外定义能在代码结构上将类定义与函数实现分开，但必须正确处理前置声明和 `<>`。函数模板的定义仍通常放在头文件中，以便实例化时可见。
+- 无论使用哪种写法，只有被明确声明为友元的函数才能访问私有成员。
 
 #### 1.3.9 类模板案例
 
@@ -8135,7 +8346,7 @@ STL大体分为六大组件，分别是:**容器、算法、迭代器、仿函�
 
 ### 2.4  STL中容器、算法、迭代器
 
-**容器：**置物之所也
+**容器：** 置物之所也
 
 STL**容器**就是将运用**最广泛的一些数据结构**实现出来
 
@@ -8143,10 +8354,10 @@ STL**容器**就是将运用**最广泛的一些数据结构**实现出来
 
 这些容器分为**序列式容器**和**关联式容器**两种:
 
-	**序列式容器**:强调值的排序，序列式容器中的每个元素均有固定的位置。
-	**关联式容器**:二叉树结构，各元素之间没有严格的物理上的顺序关系
+>**序列式容器**:强调值的排序，序列式容器中的每个元素均有固定的位置。
+>**关联式容器**:二叉树结构，各元素之间没有严格的物理上的顺序关系
 
-**算法：**问题之解法也
+**算法：** 问题之解法也
 
 有限的步骤，解决逻辑或数学上的问题，这一门学科我们叫做算法(Algorithms)
 
@@ -8156,7 +8367,7 @@ STL**容器**就是将运用**最广泛的一些数据结构**实现出来
 
 非质变算法：是指运算过程中不会更改区间内的元素内容，例如查找、计数、遍历、寻找极值等等
 
-**迭代器：**容器和算法之间粘合剂
+**迭代器：** 容器和算法之间粘合剂
 
 提供一种方法，使之能够依序寻访某个容器所含的各个元素，而又无需暴露该容器的内部表示方式。
 
@@ -8178,15 +8389,13 @@ STL**容器**就是将运用**最广泛的一些数据结构**实现出来
 
 ### 2.5 容器算法迭代器初识
 
-了解STL中容器、算法、迭代器概念之后，我们利用代码感受STL的魅力
-
 STL中最常用的容器为Vector，可以理解为数组，下面我们将学习如何向这个容器中插入数据、并遍历这个容器
 
 #### 2.5.1 vector存放内置数据类型
 
-容器：     `vector`
+容器：   `vector`
 
-算法：     `for_each`
+算法：   `for_each`
 
 迭代器： `vector<int>::iterator`
 
@@ -8212,8 +8421,8 @@ void test01() {
 	v.push_back(40);
 
 	//每一个容器都有自己的迭代器，迭代器是用来遍历容器中的元素
-	//v.begin()返回迭代器，这个迭代器指向容器中第一个数据
-	//v.end()返回迭代器，这个迭代器指向容器元素的最后一个元素的下一个位置
+	//v.begin()起始迭代器，这个迭代器指向容器中第一个数据
+	//v.end()结束迭代器，这个迭代器指向容器元素的最后一个元素的下一个位置
 	//vector<int>::iterator 拿到vector<int>这种容器的迭代器类型
 
 	vector<int>::iterator pBegin = v.begin();
@@ -8224,7 +8433,6 @@ void test01() {
 		cout << *pBegin << endl;
 		pBegin++;
 	}
-
 
 	//第二种遍历方式：
 	for (vector<int>::iterator it = v.begin(); it != v.end(); it++) {
@@ -8241,14 +8449,11 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
 
 #### 2.5.2 Vector存放自定义数据类型
-
-学习目标：vector中存放自定义数据类型，并打印输出
 
 **示例：**
 
@@ -8267,6 +8472,7 @@ public:
 	string mName;
 	int mAge;
 };
+
 //存放对象
 void test01() {
 
@@ -8278,19 +8484,21 @@ void test01() {
 	Person p3("ccc", 30);
 	Person p4("ddd", 40);
 	Person p5("eee", 50);
-
+	
+	//向容器中添加数据
+	
 	v.push_back(p1);
 	v.push_back(p2);
 	v.push_back(p3);
 	v.push_back(p4);
 	v.push_back(p5);
-
+	
+	//遍历容器中的数据
 	for (vector<Person>::iterator it = v.begin(); it != v.end(); it++) {
 		cout << "Name:" << (*it).mName << " Age:" << (*it).mAge << endl;
 
 	}
 }
-
 
 //放对象指针
 void test02() {
@@ -8316,21 +8524,17 @@ void test02() {
 	}
 }
 
-
 int main() {
 
 	test01();
 
 	test02();
 
-
 	return 0;
 }
 ```
 
 #### 2.5.3 Vector容器嵌套容器
-
-学习目标：容器中嵌套容器，我们将所有数据进行遍历输出
 
 **示例：**
 
