@@ -230,7 +230,7 @@ C++规定在创建一个变量或者常量时，必须要指定出相应的数�
 
 **作用**：整型变量表示的是==整数类型==的数据
 
-C++中能够表示整型的类型有以下几种方式，**区别在于所占内存空间不同**：
+C++ 提供了多种整型，它们的主要区别是**占用的内存空间和取值范围不同**。通常 1 字节等于 8 比特，例如 2 字节共有 16 比特：有符号short整数的取值范围为 $-2^{15}$～$2^{15}-1$；使用 `unsigned` 声明无符号整数后，所有比特都用于表示数值，取值范围变为 $0$～$2^{16}-1$，以此类推。
 
 | **数据类型**        | **占用空间**                            | 取值范围             |
 | --------------- | ----------------------------------- | ---------------- |
@@ -258,7 +258,6 @@ int main() {
 
 	cout << "long long 类型所占内存空间为： " << sizeof(long long) << endl;
 
-	system("pause");
 
 	return 0;
 }
@@ -301,7 +300,6 @@ int main() {
 	float f3 = 3e-2;  // 3 * 0.1 ^ 2
 	cout << "f3 = " << f3 << endl;
 
-	system("pause");
 
 	return 0;
 }
@@ -336,7 +334,6 @@ int main() {
 	ch = 97; //可以直接用ASCII给字符型变量赋值
 	cout << ch << endl;
 
-	system("pause");
 
 	return 0;
 }
@@ -417,7 +414,6 @@ int main() {
 	cout << "\tHello" << endl;
 	cout << "\n" << endl;
 
-	system("pause");
 
 	return 0;
 }
@@ -439,7 +435,6 @@ int main() {
    	char str1[] = "hello world";
    	cout << str1 << endl;
        
-   	system("pause");
 
    	return 0;
    }
@@ -457,7 +452,6 @@ int main() {
    	string str = "hello world";
    	cout << str << endl;
    	
-   	system("pause");
 
    	return 0;
    }
@@ -490,7 +484,6 @@ int main() {
 
 	cout << "size of bool = " << sizeof(bool) << endl; //1
 	
-	system("pause");
 
 	return 0;
 }
@@ -538,7 +531,6 @@ int main(){
 	cout << "请输入布尔型变量：" << endl;
 	cin >> flag;
 	cout << flag << endl;
-	system("pause");
 	return EXIT_SUCCESS;
 }
 ```
@@ -604,7 +596,6 @@ int main() {
 	double d2 = 0.25;
 	cout << d1 / d2 << endl;
 
-	system("pause");
 
 	return 0;
 }
@@ -639,7 +630,6 @@ int main() {
 
 	//cout << d1 % d2 << endl;
 
-	system("pause");
 
 	return 0;
 }
@@ -675,7 +665,6 @@ int main() {
 	int b3 = a3++ * 10;
 	cout << b3 << endl;
 
-	system("pause");
 
 	return 0;
 }
@@ -736,7 +725,6 @@ int main() {
 	a %= 2;  // a = a % 2;
 	cout << "a = " << a << endl;
 
-	system("pause");
 
 	return 0;
 }
@@ -777,7 +765,6 @@ int main() {
 
 	cout << (a <= b) << endl; // 1
 	
-	system("pause");
 
 	return 0;
 }
@@ -809,7 +796,6 @@ int main() {
 
 	cout << !!a << endl; // 1
 
-	system("pause");
 
 	return 0;
 }
@@ -838,7 +824,6 @@ int main() {
 
 	cout << (a && b) << endl;// 0
 
-	system("pause");
 
 	return 0;
 }
@@ -868,7 +853,6 @@ int main() {
 
 	cout << (a || b) << endl;// 0
 
-	system("pause");
 
 	return 0;
 }
@@ -921,7 +905,6 @@ if语句的三种形式
    		cout << "我考上了一本大学！！！" << endl;
    	}
 
-   	system("pause");
 
    	return 0;
    }
@@ -951,7 +934,6 @@ int main() {
 		cout << "我未考上一本大学" << endl;
 	}
 
-	system("pause");
 
 	return 0;
 }
@@ -987,7 +969,6 @@ int main() {
 		cout << "我未考上本科" << endl;
 	}
 
-	system("pause");
 
 	return 0;
 }
@@ -1042,7 +1023,6 @@ int main() {
 		cout << "我未考上本科" << endl;
 	}
 
-	system("pause");
 
 	return 0;
 }
@@ -1080,7 +1060,6 @@ int main() {
 	cout << "b = " << b << endl;
 	cout << "c = " << c << endl;
 
-	system("pause");
 
 	return 0;
 }
@@ -1144,7 +1123,6 @@ int main() {
 		break;
 	}
 
-	system("pause");
 
 	return 0;
 }
@@ -1180,7 +1158,6 @@ int main() {
 		num++;
 	}
 	
-	system("pause");
 
 	return 0;
 }
@@ -1212,7 +1189,6 @@ int main() {
 	} while (num < 10);
 	
 	
-	system("pause");
 
 	return 0;
 }
@@ -1278,7 +1254,6 @@ int main() {
 		cout << i << endl;
 	}
 	
-	system("pause");
 
 	return 0;
 }
@@ -1308,7 +1283,6 @@ int main() {
 		cout << endl;
 	}
 
-	system("pause");
 
 	return 0;
 }
@@ -1353,7 +1327,6 @@ int main() {
 		break;
 	}
 
-	system("pause");
 
 	return 0;
 }
@@ -1373,7 +1346,6 @@ int main() {
 		cout << i << endl;
 	}
 
-	system("pause");
 
 	return 0;
 }
@@ -1397,7 +1369,6 @@ int main() {
 		cout << endl;
 	}
 	
-	system("pause");
 
 	return 0;
 }
@@ -1421,7 +1392,6 @@ int main() {
 		cout << i << endl;
 	}
 	
-	system("pause");
 
 	return 0;
 }
@@ -1454,7 +1424,6 @@ int main() {
 
 	cout << "5" << endl;
 	
-	system("pause");
 
 	return 0;
 }
@@ -1526,7 +1495,6 @@ int main() {
 		cout << score3[i] << endl;
 	}
 
-	system("pause");
 
 	return 0;
 }
@@ -1563,7 +1531,6 @@ int main() {
 
 	//arr = 100; 错误，数组名是常量，因此不可以赋值
 
-	system("pause");
 
 	return 0;
 }
@@ -1608,7 +1575,6 @@ int main() {
 		cout << arr[i] << endl;
 	}
     
-	system("pause");
 
 	return 0;
 }
@@ -1669,7 +1635,6 @@ int main() {
 	//数据类型 数组名[][列数] = { 数据1，数据2 ,数据3，数据4  };
 	int arr4[][3] = { 1,2,3,4,5,6 };
 	
-	system("pause");
 
 	return 0;
 }
@@ -1709,7 +1674,6 @@ int main() {
 	cout << "二维数组第一个元素地址：" << &arr[0][0] << endl;
 	cout << "二维数组第二个元素地址：" << &arr[0][1] << endl;
 
-	system("pause");
 
 	return 0;
 }
@@ -1755,7 +1719,6 @@ int main() {
 		cout << names[i] << "同学总成绩为： " << sum << endl;
 	}
 
-	system("pause");
 
 	return 0;
 }
@@ -1843,7 +1806,6 @@ int main() {
 	sum = add(a, b);
 	cout << "sum = " << sum << endl;
 
-	system("pause");
 
 	return 0;
 }
@@ -1886,7 +1848,6 @@ int main() {
 	cout << "main中的 a = " << a << endl; //还是10
 	cout << "main中的 b = " << b << endl; //还是20
 
-	system("pause");
 
 	return 0;
 }
@@ -1964,7 +1925,6 @@ int main() {
 
 	cout << max(a, b) << endl;
 
-	system("pause");
 
 	return 0;
 }
@@ -2017,7 +1977,6 @@ int main() {
 	int b = 200;
 	swap(a, b);
 
-	system("pause");
 
 	return 0;
 }
@@ -2057,7 +2016,6 @@ int main() {
 	//通过*操作指针变量指向的内存
 	cout << "*p = " << *p << endl;
 
-	system("pause");
 
 	return 0;
 }
@@ -2094,7 +2052,6 @@ int main() {
 	cout << sizeof(float *) << endl;
 	cout << sizeof(double *) << endl;
 
-	system("pause");
 
 	return 0;
 }
@@ -2122,7 +2079,6 @@ int main() {
 	//内存编号0 ~255为系统占用内存，不允许用户访问
 	cout << *p << endl;
 
-	system("pause");
 
 	return 0;
 }
@@ -2141,7 +2097,6 @@ int main() {
 	//访问野指针报错 
 	cout << *p << endl;
 
-	system("pause");
 
 	return 0;
 }
@@ -2231,7 +2186,6 @@ int main() {
 	//p3 = &b; //错误
 	//*p3 = 100; //错误
 
-	system("pause");
 
 	return 0;
 }
@@ -2276,7 +2230,6 @@ int main() {
 		p++;
 	}
 
-	system("pause");
 
 	return 0;
 }
@@ -2316,7 +2269,6 @@ int main() {
 
 	cout << "b = " << b << endl;
 
-	system("pause");
 
 	return 0;
 }
@@ -2368,7 +2320,6 @@ int main() {
 
 	printArray(arr, len);
 
-	system("pause");
 
 	return 0;
 }
@@ -2431,7 +2382,6 @@ int main() {
 
 	cout << "姓名：" << stu3.name << " 年龄：" << stu3.age  << " 分数：" << stu3.score << endl;
 
-	system("pause");
 
 	return 0;
 }
@@ -2476,7 +2426,6 @@ int main() {
 		cout << "姓名：" << arr[i].name << " 年龄：" << arr[i].age << " 分数：" << arr[i].score << endl;
 	}
 
-	system("pause");
 
 	return 0;
 }
@@ -2510,7 +2459,6 @@ int main() {
 
 	cout << "姓名：" << p->name << " 年龄：" << p->age << " 分数：" << p->score << endl;
 	
-	system("pause");
 
 	return 0;
 }
@@ -2562,7 +2510,6 @@ int main() {
 	
 	cout << "辅导学员 姓名： " << t1.stu.name << " 年龄：" << t1.stu.age << " 考试分数： " << t1.stu.score << endl;
 
-	system("pause");
 
 	return 0;
 }
@@ -2618,7 +2565,6 @@ int main() {
 	printStudent2(&stu);
 	cout << "主函数中 姓名：" << stu.name << " 年龄： " << stu.age  << " 分数：" << stu.score << endl;
 
-	system("pause");
 
 	return 0;
 }
@@ -2656,7 +2602,6 @@ int main() {
 
 	printStudent(&stu);
 
-	system("pause");
 
 	return 0;
 }
@@ -2731,7 +2676,6 @@ int main() {
 
 	printTeachers(tArray, len); //打印数据
 	
-	system("pause");
 
 	return 0;
 }
@@ -2807,7 +2751,6 @@ int main() {
 
 	printHeros(arr, len); //打印
 
-	system("pause");
 
 	return 0;
 }
@@ -2994,7 +2937,6 @@ int main() {
 
 	//cout << *p << endl; //报错，释放的空间不可访问
 
-	system("pause");
 
 	return 0;
 }
@@ -3049,7 +2991,6 @@ int main() {
 	cout << "a = " << a << endl; //20
 	cout << "b = " << b << endl;
 
-	system("pause");
 
 	return 0;
 }
@@ -3285,7 +3226,6 @@ int main() {
 
 	func(10,10); //占位参数必须填补
 
-	system("pause");
 
 	return 0;
 }
@@ -3585,7 +3525,6 @@ int main() {
 	C2 c2;
 	c2.m_A = 10; //正确，访问权限是公共
 
-	system("pause");
 
 	return 0;
 }
@@ -3654,7 +3593,6 @@ int main() {
 	p.setLover("苍井");
 	//cout << "情人： " << p.m_Lover << endl;  //只写属性，不可以读取
 
-	system("pause");
 
 	return 0;
 }
@@ -3882,7 +3820,6 @@ int main() {
 	//test02();
 	test03();
 
-	system("pause");
 
 	return 0;
 }
@@ -4249,7 +4186,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -4307,7 +4243,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -5150,7 +5085,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -5851,7 +5785,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -6898,7 +6831,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -7057,7 +6989,6 @@ int main() {
 	test01();
 	test02();
 
-	system("pause");
 
 	return 0;
 }
@@ -7664,7 +7595,6 @@ int main() {
 	test02();
 	test03();
 
-	system("pause");
 
 	return 0;
 }
@@ -7725,8 +7655,6 @@ int main() {
 
 	test02();
 
-	system("pause");
-
 	return 0;
 }
 ```
@@ -7734,8 +7662,6 @@ int main() {
 总结：如果父类是类模板，子类需要指定出父类中T的数据类型
 
 #### 1.3.6 类模板成员函数类外实现
-
-学习目标：能够掌握类模板中的成员函数类外实现
 
 **示例：**
 
@@ -7778,8 +7704,6 @@ int main() {
 
 	test01();
 
-	system("pause");
-
 	return 0;
 }
 ```
@@ -7788,81 +7712,92 @@ int main() {
 
 #### 1.3.7 类模板分文件编写
 
-学习目标：
+**问题：**
 
-* 掌握类模板成员函数分文件编写产生的问题以及解决方式
+类模板中的成员函数在调用时才会创建。如果只在头文件中声明类模板，却把成员函数的实现放在单独的 `.cpp` 文件中，使用该模板的源文件就可能看不到成员函数的实现，从而在链接时出现错误。
 
-问题：
+普通类在编译 `.cpp` 文件时就能生成成员函数，而类模板必须先确定模板参数，才能生成具体的函数。例如，只有使用 `Person<string, int>` 时，编译器才会生成对应类型的构造函数和 `showPerson` 函数。
 
-* 类模板中成员函数创建时机是在调用阶段，导致分文件编写时链接不到
+**解决方式：**
 
-解决：
+1. 直接包含实现类模板的 `.cpp` 文件，让编译器能够同时看到类模板的声明和实现。这种方式可以解决问题，但不常用。
+2. 将类模板的声明和实现写在同一个文件中，并把文件后缀名改为 `.hpp`。这是更常用的方式。
 
-* 解决方式1：直接包含.cpp源文件
-* 解决方式2：将声明和实现写到同一个文件中，并更改后缀名为.hpp，hpp是约定的名称，并不是强制
+> `.hpp` 只是常用的命名约定，并不是 C++ 语法的强制要求。它通常表示文件中既有声明，也有实现。
 
 **示例：**
 
-person.hpp中代码：
+`person.hpp` 中的代码如下：
 
-```C++
+```cpp
 #pragma once
+
 #include <iostream>
-using namespace std;
 #include <string>
 
-template<class T1, class T2>
+using namespace std;
+
+template <class T1, class T2>
 class Person {
 public:
-	Person(T1 name, T2 age);
-	void showPerson();
+    Person(T1 name, T2 age);
+    void showPerson();
+
 public:
-	T1 m_Name;
-	T2 m_Age;
+    T1 m_Name;
+    T2 m_Age;
 };
 
-//构造函数 类外实现
-template<class T1, class T2>
+// 构造函数在类外实现
+// Person<T1, T2> 表示这是一个由 T1、T2 确定的 Person 类
+// :: 表示后面的 Person 构造函数属于这个类
+template <class T1, class T2>
 Person<T1, T2>::Person(T1 name, T2 age) {
-	this->m_Name = name;
-	this->m_Age = age;
+    this->m_Name = name;
+    this->m_Age = age;
 }
 
-//成员函数 类外实现
-template<class T1, class T2>
+// 成员函数在类外实现
+// 类外实现类模板的成员函数时，需要再次声明模板参数
+template <class T1, class T2>
 void Person<T1, T2>::showPerson() {
-	cout << "姓名: " << this->m_Name << " 年龄:" << this->m_Age << endl;
+    cout << "姓名：" << this->m_Name
+         << " 年龄：" << this->m_Age << endl;
 }
 ```
 
-类模板分文件编写.cpp中代码
+- `#pragma once` 用于防止当前头文件被重复包含。
 
-```C++
-#include<iostream>
+主程序中的代码如下：
+
+```cpp
+#include <iostream>
+#include "person.hpp"
+
 using namespace std;
 
-//#include "person.h"
-#include "person.cpp" //解决方式1，包含cpp源文件
-
-//解决方式2，将声明和实现写到一起，文件后缀名改为.hpp
-#include "person.hpp"
-void test01()
-{
-	Person<string, int> p("Tom", 10);
-	p.showPerson();
+void test01() {
+    Person<string, int> p("Tom", 10);
+    p.showPerson();
 }
 
 int main() {
-
-	test01();
-
-	system("pause");
-
-	return 0;
+    test01();
+    return 0;
 }
 ```
 
-总结：主流的解决方式是第二种，将类模板成员函数写到一起，并将后缀名改为.hpp
+`Person<string, int>` 将 `T1` 确定为 `string`，将 `T2` 确定为 `int`。此时编译器才能根据 `person.hpp` 中的完整代码生成对应的 `Person` 类及其成员函数。
+
+如果使用第一种方式，也可以写成：
+
+```cpp
+#include "person.cpp"
+```
+
+这样做同样能让当前源文件看到模板的完整实现，但直接包含 `.cpp` 文件容易使项目结构混乱，因此通常使用包含 `person.hpp` 的第二种方式。
+
+**总结：** 类模板的成员函数在调用时才会实例化，因此使用类模板的源文件需要看到完整的声明和实现。主流做法是将二者写在同一个 `.hpp` 文件中，再在需要使用类模板的地方包含该文件。
 
 #### 1.3.8 类模板与友元
 
@@ -7940,7 +7875,6 @@ int main() {
 
 	test02();
 
-	system("pause");
 
 	return 0;
 }
@@ -8160,7 +8094,6 @@ int main() {
 
 	test02();
 
-	system("pause");
 
 	return 0;
 }
@@ -8308,7 +8241,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -8391,7 +8323,6 @@ int main() {
 
 	test02();
 
-	system("pause");
 
 	return 0;
 }
@@ -8444,7 +8375,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -8508,7 +8438,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -8572,7 +8501,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -8631,7 +8559,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -8700,7 +8627,6 @@ int main() {
 	//test01();
 	//test02();
 
-	system("pause");
 
 	return 0;
 }
@@ -8763,7 +8689,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -8809,7 +8734,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -8848,7 +8772,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -8888,7 +8811,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -8963,7 +8885,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -9024,7 +8945,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -9100,7 +9020,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -9179,7 +9098,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -9239,7 +9157,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -9325,7 +9242,6 @@ int main() {
 
 	test02();
 
-	system("pause");
 
 	return 0;
 }
@@ -9373,7 +9289,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -9452,7 +9367,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -9514,7 +9428,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -9588,7 +9501,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -9715,7 +9627,6 @@ int main() {
 
     test03();
 
-	system("pause");
 
 	return 0;
 }
@@ -9788,7 +9699,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -9844,7 +9754,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -9971,7 +9880,6 @@ int main() {
 	//3、显示最后得分
 	showScore(v);
 
-	system("pause");
 
 	return 0;
 }
@@ -10047,7 +9955,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -10158,7 +10065,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -10252,7 +10158,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -10344,7 +10249,6 @@ int main() {
 
 	test02();
 
-	system("pause");
 
 	return 0;
 }
@@ -10416,7 +10320,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -10511,7 +10414,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -10568,7 +10470,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -10634,7 +10535,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -10719,7 +10619,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -10800,7 +10699,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -10894,7 +10792,6 @@ int main() {
 
 	test02();
 
-	system("pause");
 
 	return 0;
 }
@@ -10962,7 +10859,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -11021,7 +10917,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -11084,7 +10979,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -11125,7 +11019,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -11190,7 +11083,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -11250,7 +11142,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -11334,7 +11225,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -11416,7 +11306,6 @@ int main() {
 
 	test02();
 
-	system("pause");
 
 	return 0;
 }
@@ -11487,7 +11376,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -11546,7 +11434,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -11599,7 +11486,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -11742,7 +11628,6 @@ int main() {
 	//	cout << "姓名： " << it->m_Name << " 工资： " << it->m_Salary << endl;
 	//}
 
-	system("pause");
 
 	return 0;
 }
@@ -11839,7 +11724,6 @@ int main() {
 	//test02();
 	test03();
 
-	system("pause");
 
 	return 0;
 }
@@ -11896,7 +11780,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -11952,7 +11835,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -12020,7 +11902,6 @@ int main() {
 	test01();
 	test02();
 
-	system("pause");
 
 	return 0;
 }
@@ -12088,7 +11969,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -12143,7 +12023,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -12232,7 +12111,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -12306,7 +12184,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -12528,7 +12405,6 @@ int main() {
 
 	test02();
 
-	system("pause");
 
 	return 0;
 }
@@ -12632,7 +12508,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -12732,7 +12607,6 @@ int main() {
 
 	test02();
 
-	system("pause");
 
 	return 0;
 }
@@ -12839,7 +12713,6 @@ int main() {
 
 	test02();
 
-	system("pause");
 
 	return 0;
 }
@@ -12912,7 +12785,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -12973,7 +12845,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -13039,7 +12910,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -13102,7 +12972,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -13174,7 +13043,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -13243,7 +13111,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -13322,7 +13189,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -13388,7 +13254,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -13451,7 +13316,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -13509,7 +13373,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -13592,7 +13455,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -13664,7 +13526,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
@@ -13742,7 +13603,6 @@ int main() {
 
 	test01();
 
-	system("pause");
 
 	return 0;
 }
