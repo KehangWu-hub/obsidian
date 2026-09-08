@@ -98,11 +98,11 @@ taskTypes: List[str] = field(default_factory=lambda: ["search", "fire", "facilit
 
 # 变量占位符与拆包赋值
 
-## 1. 语法现象：`_, var = function()`
+## 语法现象：`_, var = function()`
 
 在 Python 中，当一个函数返回多个值（以元组形式）时，如果我们只需要其中的某一个或某几个，可以使用 `_` 作为占位符。
 
-### 示例代码
+## 示例代码
 
 ```python
 def get_user_info():
@@ -367,7 +367,7 @@ ENVS_DIR = os.path.join(ROOT_DIR, 'legged_gym', 'envs')
 
 `task_registry = TaskRegistry()`
 
-随后在其他所有文件中，导入的都是这个小写的 `task_registry` 对象，而不是大写的 `TaskRegistry` 类。这是 Python 中实现**单例模式（Singleton Pattern）**的经典操作。
+随后在其他所有文件中，导入的都是这个小写的 `task_registry` 对象，而不是大写的 `TaskRegistry` 类。这是 Python 中实现 **单例模式（Singleton Pattern）** 的经典操作。
 
 ## 一、 核心区别：导入“类” vs 导入“对象”
 
@@ -393,39 +393,47 @@ ENVS_DIR = os.path.join(ROOT_DIR, 'legged_gym', 'envs')
 2. **读取数据阶段（下发任务）**
    当运行 `train.py` 开始训练时，主程序会调用 `task_registry.make_env(...)`，要求管家根据名字去字典里找对应的图纸。
 
-# VS Code 找不到代码引用或高亮
+# 命令行参数
 
-## 问题现象
+终端中的 `--task=go2` 是传给 `play.py` 的参数：
 
-在 VS Code 中选中一个函数（比如 `step`），但在其他类中调用它的地方（比如 `self.bandit.step()`）却没有高亮显示。右键点击“查找所有引用”也毫无反应，让人误以为这个函数没被用过。
+```bash
+python play.py --task=go2
+```
 
-## 根本原因：Python 的“动态类型”特性
+Python 一般使用 `argparse` 定义并读取这类参数：
 
-Python 是一门非常自由的语言，声明变量时不需要指定类型。
+```python
+import argparse
 
-当你写下 `def __init__(self, bandit):` 时，VS Code 的代码分析器（Pylance/IntelliSense）并不知道传入的 `bandit` 到底是个什么对象（是数字？是字符串？还是老虎机？）。因为不知道身份，VS Code 为了避免报错，干脆就不进行跨文件/跨类的高亮关联。
+parser = argparse.ArgumentParser()
+parser.add_argument("--task", type=str, default="go2")
+args = parser.parse_args()
 
-## 终极解决办法：类型提示 (Type Hint)
+print(args.task)
+```
 
-在定义参数时，顺手给它“贴个标签”，明确告诉 VS Code 它的真实身份。
+- `add_argument()` 定义允许传入的参数。
+- `type=str` 表示参数值是字符串。
+- `default="go2"` 表示没有传入时使用默认值。
+- `parse_args()` 解析终端输入。
+- `args.task` 取出结果 `"go2"`。
 
-- **修改前（VS Code 无法识别）：**
+`--task=go2` 和 `--task go2` 的效果相同。
 
-    ```python
-    def __init__(self, bandit):
-    ```
+## 与任务注册表的关系
 
-- **修改后（VS Code 瞬间变聪明）：**
+命令行参数只负责传入名称，任务注册表负责找到名称对应的环境：
 
-    ```python
-    def __init__(self, bandit: BernoulliBandit):
-    ```
+```python
+task_registry.register("go2", Go2Env)
 
-*(加上 `: BernoulliBandit` 后，VS Code 瞬间就能把两个类关联起来，代码高亮、`Ctrl + 点击` 跳转、自动补全全部复活！)*
+env_class = task_registry.get_task_class(args.task)
+env = env_class()
+```
 
-## 备用方案：暴力搜索法
+完整过程是：
 
-如果是在阅读别人写的老代码（没有类型提示），千万别依赖高亮来判断函数有没有被调用。请直接使用：
-
-1.  **单文件搜索**：`Ctrl + F`
-2.  **全局搜索（最管用）**：`Ctrl + Shift + F`，在整个工程文件夹里直接搜索函数名。
+```text
+--task=go2 → args.task → task_registry → Go2Env
+```
