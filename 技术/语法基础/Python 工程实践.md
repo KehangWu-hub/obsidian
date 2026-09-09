@@ -34,51 +34,114 @@ np.array_equal(loc1, loc2)  # False（元素不全等）
 np.array_equal(loc1, loc3)  # True（所有元素相等，形状也一致）
 ```
 
-# @dataclass与@abstractmethod
+# `@dataclass`、`@abstractmethod` 与 `@staticmethod`
 
-## @dataclass 装饰器
+三者都是装饰器，但作用对象和目的不同：`@dataclass` 处理类，`@abstractmethod` 和 `@staticmethod` 处理方法。
 
-**来源**：`from dataclasses import dataclass` (Python 3.7+)
+## `@dataclass`
 
-**定义**：一个用于简化类定义的装饰器，专门用于创建主要存储数据的类（Data Class）。
+`@dataclass` 来自 `dataclasses` 模块，用于简化以保存数据为主的类。它会根据类型注解自动生成 `__init__`、`__repr__` 和 `__eq__` 等方法。
 
-**核心功能**：自动生成 `__init__`、`__repr__`、`__eq__` 等样板代码，让代码极度简洁。
+```python
+from dataclasses import dataclass
 
-==写法对比
+@dataclass
+class Point:
+    x: int
+    y: int
 
-- **传统写法（手动挡）**：
+point = Point(1, 2)
+print(point)  # Point(x=1, y=2)
+```
 
-    ```python
-    class Point:
-        def __init__(self, x, y):
-            self.x = x
-            self.y = y
-        def __repr__(self):
-            return f"Point(x={self.x}, y={self.y})"
-    ```
+不使用 `@dataclass` 时，需要手动编写初始化方法：
 
-- **Dataclass 写法（自动挡）**：
+```python
+class Point:
+    def __init__(self, x: int, y: int):
+        self.x = x
+        self.y = y
+```
 
-    ```python
-    @dataclass
-    class Point:
-        x: int
-        y: int
-    ```
+`@dataclass` 适合配置、坐标、记录等数据类，但不会阻止你继续添加普通方法。
 
-## 两个高频装饰器：`@abstractmethod` vs `@dataclass`
+## `@abstractmethod`
 
-它们虽然都带 `@` 符号，但分工完全相反，一个是配置函数，一个配置类：
+`@abstractmethod` 来自 `abc` 模块，用于声明子类必须实现的方法。包含抽象方法的类还需要继承 `ABC`，否则抽象约束不会完整生效。
 
-- **`@abstractmethod`**：
-  * **用法**：放在“空壳”类里面的函数头上。
-  * **作用**：只提要求，不干活。它强制规定：“谁继承我所在的类，谁就必须自己把这个函数的具体代码写出来，否则直接报错不准运行！”
+```python
+from abc import ABC, abstractmethod
 
-- **`@dataclass`**：
-  * **用法**：放在专门用来装载配置参数的类头上（如 `xxxCfg`）。
-  * **作用**：帮你干活。只要加了它，你只需要像写变量一样把参数列出来，Python 就会在后台自动帮你写好繁琐的 `__init__` 初始化函数，极大地保持了代码的整洁。
+class VecEnv(ABC):
+    @abstractmethod
+    def reset(self):
+        pass
 
-注：我个人的理解@abstractmethod这个装饰器感觉完全没必要啊，加了跟没加一样。
+class RobotEnv(VecEnv):
+    pass
+
+env = RobotEnv()  # TypeError：RobotEnv 没有实现 reset()
+```
+
+子类实现全部抽象方法后才能实例化：
+
+```python
+class RobotEnv(VecEnv):
+    def reset(self):
+        print("环境已重置")
+
+env = RobotEnv()
+```
+
+`@abstractmethod` 并非“加不加都一样”。没有它时，遗漏方法通常要等到运行并调用该方法后才会暴露；有了它，Python 会在实例化子类时立即报错。它检查的是接口是否实现，不负责提供具体逻辑。
+
+抽象方法也可以包含默认实现。子类仍需覆盖该方法，并可通过 `super()` 复用其中的代码。
+
+## `@staticmethod`
+
+`@staticmethod` 把函数放在类的命名空间中，但调用时不会自动传入实例 `self` 或类 `cls`。
+
+```python
+class Vector:
+    @staticmethod
+    def is_valid(x: float, y: float) -> bool:
+        return x != 0 or y != 0
+
+print(Vector.is_valid(1, 0))  # True
+```
+
+静态方法既可以通过类调用，也可以通过实例调用，但通常推荐通过类调用，以明确它不依赖实例状态。
+
+```python
+vector = Vector()
+vector.is_valid(0, 0)  # 可以调用，但 Vector.is_valid(...) 更清晰
+```
+
+适合使用 `@staticmethod` 的情况：
+
+- 方法在概念上属于这个类。
+- 方法不读取或修改实例属性，因此不需要 `self`。
+- 方法不读取或修改类属性，因此不需要 `cls`。
+
+如果函数与类没有明显关系，直接定义为模块级函数通常更合适。
+
+## 三者的区别
+
+| 装饰器 | 放置位置 | 自动传入参数 | 主要作用 |
+| --- | --- | --- | --- |
+| `@dataclass` | 类定义上方 | 不适用 | 自动生成数据类的常用方法 |
+| `@abstractmethod` | 方法定义上方 | 取决于方法类型，普通实例方法传入 `self` | 强制子类实现指定接口 |
+| `@staticmethod` | 方法定义上方 | 无 | 定义不依赖实例和类状态的方法 |
+
+`@staticmethod` 还可以与 `@abstractmethod` 组合，要求子类实现一个静态方法。装饰器顺序不能颠倒：
+
+```python
+class Parser(ABC):
+    @staticmethod
+    @abstractmethod
+    def parse(text: str):
+        pass
+```
 
 # field(default_factory=...)
 
@@ -437,3 +500,116 @@ env = env_class()
 ```text
 --task=go2 → args.task → task_registry → Go2Env
 ```
+
+# Python 中 `class` 套 `class` 的实例化
+
+## 嵌套类不会自动实例化
+
+在一个类中定义另一个类，只是在外层类的命名空间中创建了一个类对象。创建外层类的实例时，Python 不会自动创建内层类的实例。
+
+```python
+class RobotCfg:
+    class Control:
+        def __init__(self):
+            print("创建 Control 实例")
+
+cfg = RobotCfg()  # 不会输出任何内容
+```
+
+此时，`RobotCfg.Control` 表示内层类本身，而不是内层类的实例：
+
+```python
+print(RobotCfg.Control)       # <class '__main__.RobotCfg.Control'>
+
+control = RobotCfg.Control()  # 此时才会实例化，并调用 Control.__init__()
+```
+
+## 外层实例访问到的仍可能是类
+
+内层类是外层类的类属性，因此也可以通过外层实例找到它，但访问结果仍是类对象。
+
+```python
+cfg = RobotCfg()
+
+print(cfg.Control is RobotCfg.Control)  # True
+control = cfg.Control()                 # 手动实例化内层类
+```
+
+`cfg.Control` 能被访问，不代表 `Control` 已经随 `cfg` 一起实例化。判断时要看后面是否调用了括号 `()`：
+
+- `cfg.Control`：取得内层类。
+- `cfg.Control()`：创建内层类的实例。
+
+## 需要自动创建时应显式实例化
+
+如果希望每个外层实例都拥有独立的内层实例，应在外层类的 `__init__()` 中主动创建。
+
+```python
+class RobotCfg:
+    class Control:
+        def __init__(self):
+            self.stiffness = 20.0
+
+    def __init__(self):
+        self.control = self.Control()
+
+cfg_a = RobotCfg()
+cfg_b = RobotCfg()
+
+print(cfg_a.control.stiffness)          # 20.0
+print(cfg_a.control is cfg_b.control)   # False
+```
+
+这里需要区分大小写不同的两个名称：
+
+- `Control` 是内层类。
+- `control` 是保存在外层实例中的内层类实例。
+
+## 配置类中的常见情况
+
+一些框架使用嵌套类组织配置，但内层通常只保存类属性，因此不一定需要实例化。
+
+```python
+class RobotCfg:
+    class Control:
+        stiffness = 20.0
+        damping = 0.5
+
+print(RobotCfg.Control.stiffness)  # 20.0
+```
+
+这种写法把 `Control` 当作配置的命名空间。是否需要实例化取决于框架如何读取配置，不能仅凭 `class` 套 `class` 判断。
+
+## 内层类不会自动持有外层实例
+
+实例化内层类时，Python 不会自动传入外层实例。内层方法中的 `self` 指向内层类的实例。
+
+```python
+class Robot:
+    def __init__(self, name: str):
+        self.name = name
+
+    class Controller:
+        def show_name(self):
+            return self.name  # self 是 Controller 实例，不是 Robot 实例
+```
+
+如果内层实例需要访问外层实例，应显式传入并保存：
+
+```python
+class Robot:
+    def __init__(self, name: str):
+        self.name = name
+        self.controller = self.Controller(self)
+
+    class Controller:
+        def __init__(self, robot):
+            self.robot = robot
+
+        def show_name(self):
+            return self.robot.name
+
+robot = Robot("A1")
+print(robot.controller.show_name())  # A1
+```
+
