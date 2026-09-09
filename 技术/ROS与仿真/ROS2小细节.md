@@ -10,9 +10,7 @@ date: 2025-03-12
 
 这篇笔记记录一些在学习和使用 ROS 2 时遇到的基础细节。
 
-## 终端与工作空间
-
-### `source` 与 `colcon build`
+## `source` 与 `colcon build`
 
 同一个终端中，ROS 2 的系统环境通常只需要加载一次：
 
@@ -35,39 +33,24 @@ source install/setup.bash
 
 新开终端后，需要重新执行相应的 `source` 命令。也可以把命令写入 `~/.bashrc`，让终端启动时自动加载。
 
-### 终端快捷操作
+## 路径拼接
 
-- 按方向键 `↑` 可以调出上一条命令，适合快速修改并重新执行。
-- `Ctrl + C` 用于终止当前命令，不是复制。
-- Linux 终端中的复制和粘贴通常是 `Ctrl + Shift + C` 与 `Ctrl + Shift + V`。
-- 输入命令或文件名的一部分后按 `Tab`，可以自动补全。
-
-## 编辑代码时的快捷键
-
-以下是 VS Code 中常用的编辑操作：
-
-- `Ctrl + /`：注释或取消注释当前行。
-- `Alt + ↑` / `Alt + ↓`：向上或向下移动当前行。
-- 光标停在一行中时，直接按 `Ctrl + C` 再按 `Ctrl + V`，可以复制整行。
-- `Ctrl + F`：在当前文件中搜索。
-- `Ctrl + Shift + F`：在整个工程中搜索。
-
-> 将 `cat`、`xacro` 等命令与文件路径拼接时，中间必须保留空格。例如：`xacro robot.urdf.xacro`。
+ 将 `cat`、`xacro` 等命令与文件路径拼接时，中间必须保留空格。例如：`xacro robot.urdf.xacro`。
 
 ## ROS 2 常用英文术语
 
-| 英文术语 | 中文含义 |
-| --- | --- |
-| package | 功能包 |
-| executable | 可执行文件 |
-| parameter | 参数 |
-| argument | 命令行参数 |
-| topic | 话题 |
-| service | 服务 |
-| sensor | 传感器 |
-| actuator | 执行器或执行机构 |
-| publisher | 发布者 |
-| subscriber | 订阅者 |
+| 英文术语       | 中文含义     |
+| ---------- | -------- |
+| package    | 功能包      |
+| executable | 可执行文件    |
+| parameter  | 参数       |
+| argument   | 命令行参数    |
+| topic      | 话题       |
+| service    | 服务       |
+| sensor     | 传感器      |
+| actuator   | 执行器或执行机构 |
+| publisher  | 发布者      |
+| subscriber | 订阅者      |
 
 名称中包含 `default` 的变量通常表示“默认值”。调用者没有传入其他值时，程序会采用该默认值；显式传值后，则使用传入的值。
 
@@ -90,60 +73,6 @@ robot_node = Node(
 ```
 
 这里的 `use_sim_time` 是 ROS 2 参数，`--verbose` 是传给程序的命令行参数。
-
-## Xacro、URDF、SDF 与插件
-
-URDF、SDF 和 Xacro 文件本质上都使用 XML 风格的语法，但用途不同：
-
-- **URDF**：描述机器人的连杆、关节、惯性和外观等信息。
-- **SDF**：描述 Gazebo 世界、模型、传感器和插件等内容，表达能力比 URDF 更丰富。
-- **Xacro**：一种 XML 宏语言，通过变量、宏和条件语句生成最终的 URDF/XML 内容。
-
-Xacro 文件本身不会被划分为“执行器文件”或“插件文件”。ROS 2 和 Gazebo 关注的是 Xacro 展开后生成的 URDF/SDF 标签。
-
-判断插件和硬件接口时主要看以下标签：
-
-- Gazebo 插件通常写在 `<gazebo>` 中，并通过 `<plugin>` 声明动态库。
-- `ros2_control` 的硬件接口写在 `<ros2_control>` 中。
-- Gazebo 主要处理 `<gazebo>` 中的插件配置。
-- `ros2_control` 根据 `<ros2_control>` 中的硬件与关节接口配置工作。
-
-示例：
-
-```xml
-<gazebo>
-  <plugin filename="libgazebo_ros2_control.so"
-          name="gazebo_ros2_control"/>
-</gazebo>
-```
-
-> 在正文中直接书写 `<gazebo>`、`<plugin>` 等 XML 标签时，应使用反引号包裹，否则 Obsidian 可能把它们当作 HTML 标签，导致后续 Markdown 渲染异常。
-
-## XML 标签未闭合报错
-
-如果 Xacro 或 URDF 报错并提示 `Check that your XML is well-formed`，通常表示 XML 格式不正确。常见原因包括：
-
-- 开始标签没有对应的结束标签；
-- 标签嵌套顺序错误；
-- 属性引号缺失；
-- 单标签结尾误写为 `>`，正确形式应为 `/>`。
-
-例如：
-
-```xml
-<!-- 错误：标签没有闭合 -->
-<mesh filename="robot.stl">
-
-<!-- 正确：自闭合标签 -->
-<mesh filename="robot.stl"/>
-```
-
-可以使用下面的命令检查 Xacro 是否能够正常展开：
-
-```bash
-xacro robot.urdf.xacro > /tmp/robot.urdf
-check_urdf /tmp/robot.urdf
-```
 
 ## 解决 `rclpy` 导入警告
 
