@@ -8596,11 +8596,15 @@ int main() {
 **string和char * 区别：**
 
 * char * 是一个指针
-* string是一个类，类内部封装了char\*，管理这个字符串，是一个char\*型的容器。
+* string是一个类，类内部管理一段字符序列，也可以看作一个字符容器。
+
+> “类”和“容器”并不冲突：类描述它的实现形式，容器描述它的用途。`string` 是一个类，同时提供了存储、访问和修改多个 `char` 的能力，因此也是一种专门存放字符的容器。
 
 **特点：**
 
 string 类内部封装了很多成员方法
+
+> 成员方法不一定都是算法：成员方法是“属于类的函数”，强调归属；算法是“解决问题的一组步骤”，强调功能。部分成员方法内部会实现算法，例如 `find` 实现字符串查找；而 `size` 这类方法主要用于读取状态，通常不特别称为算法。
 
 例如：查找find，拷贝copy，删除delete 替换replace，插入insert
 
@@ -8641,7 +8645,6 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
@@ -8656,13 +8659,15 @@ int main() {
 
 赋值的函数原型：
 
-* `string& operator=(const char* s);`             //char*类型字符串 赋值给当前的字符串
-* `string& operator=(const string &s);`         //把字符串s赋给当前的字符串
-* `string& operator=(char c);`                          //字符赋值给当前的字符串
-* `string& assign(const char *s);`                  //把字符串s赋给当前的字符串
-* `string& assign(const char *s, int n);`     //把字符串s的前n个字符赋给当前的字符串
-* `string& assign(const string &s);`              //把字符串s赋给当前字符串
-* `string& assign(int n, char c);`                  //用n个字符c赋给当前字符串
+* `string& operator=(const char* s);` //char\*类型字符串 赋值给当前的字符串
+* `string& operator=(const string &s);` //把字符串s赋给当前的字符串
+* `string& operator=(char c);` //字符赋值给当前的字符串
+* `string& assign(const char *s);` //把字符串s赋给当前的字符串
+* `string& assign(const char *s, int n);` //把字符串s的前n个字符赋给当前的字符串
+* `string& assign(const string &s);` //把字符串s赋给当前字符串
+* `string& assign(int n, char c);`  //用n个字符c赋给当前字符串
+
+> 这些赋值方式都定义在 `string` 类中。`operator=` 是对 `=` 的重载，`assign()` 是成员方法的重载；它们通过不同的参数类型或数量接收不同形式的数据，编译器会自动选择匹配的版本。
 
 **示例：**
 
@@ -8704,7 +8709,6 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
@@ -8721,13 +8725,13 @@ int main() {
 
 **函数原型：**
 
-* `string& operator+=(const char* str);`                   //重载+=操作符
-* `string& operator+=(const char c);`                         //重载+=操作符
-* `string& operator+=(const string& str);`                //重载+=操作符
-* `string& append(const char *s); `                               //把字符串s连接到当前字符串结尾
-* `string& append(const char *s, int n);`                 //把字符串s的前n个字符连接到当前字符串结尾
-* `string& append(const string &s);`                           //同operator+=(const string& str)
-* `string& append(const string &s, int pos, int n);`//字符串s中从pos开始的n个字符连接到字符串结尾
+* `string& operator+=(const char* str);` //重载+=操作符
+* `string& operator+=(const char c);` //重载+=操作符
+* `string& operator+=(const string& str);` //重载+=操作符
+* `string& append(const char *s); ` //把字符串s连接到当前字符串结尾
+* `string& append(const char *s, int n);` //把字符串s的前n个字符连接到当前字符串结尾
+* `string& append(const string &s);` //同operator+=(const string& str)
+* `string& append(const string &s, int pos, int n);` //字符串s中从pos开始的n个字符连接到字符串结尾
 
 **示例：**
 
@@ -8762,7 +8766,6 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
@@ -8778,16 +8781,16 @@ int main() {
 
 **函数原型：**
 
-* `int find(const string& str, int pos = 0) const;`              //查找str第一次出现位置,从pos开始查找
-* `int find(const char* s, int pos = 0) const; `                     //查找s第一次出现位置,从pos开始查找
-* `int find(const char* s, int pos, int n) const; `               //从pos位置查找s的前n个字符第一次位置
-* `int find(const char c, int pos = 0) const; `                       //查找字符c第一次出现位置
-* `int rfind(const string& str, int pos = npos) const;`      //查找str最后一次位置,从pos开始查找
-* `int rfind(const char* s, int pos = npos) const;`              //查找s最后一次出现位置,从pos开始查找
-* `int rfind(const char* s, int pos, int n) const;`              //从pos查找s的前n个字符最后一次位置
-* `int rfind(const char c, int pos = 0) const;  `                      //查找字符c最后一次出现位置
-* `string& replace(int pos, int n, const string& str); `       //替换从pos开始n个字符为字符串str
-* `string& replace(int pos, int n,const char* s); `                 //替换从pos开始的n个字符为字符串s
+* `int find(const string& str, int pos = 0) const;` //查找str第一次出现位置,从pos开始查找
+* `int find(const char* s, int pos = 0) const; ` //查找s第一次出现位置,从pos开始查找
+* `int find(const char* s, int pos, int n) const; ` //从pos位置查找s的前n个字符第一次位置
+* `int find(const char c, int pos = 0) const; ` //查找字符c第一次出现位置
+* `int rfind(const string& str, int pos = npos) const;` //查找str最后一次位置,从pos开始查找
+* `int rfind(const char* s, int pos = npos) const;` //查找s最后一次出现位置,从pos开始查找
+* `int rfind(const char* s, int pos, int n) const;` //从pos查找s的前n个字符最后一次位置
+* `int rfind(const char c, int pos = 0) const;  ` //查找字符c最后一次出现位置
+* `string& replace(int pos, int n, const string& str); ` //替换从pos开始n个字符为字符串str
+* `string& replace(int pos, int n,const char* s); ` //替换从pos开始的n个字符为字符串s
 
 **示例：**
 
@@ -8829,7 +8832,6 @@ int main() {
 
 	//test01();
 	//test02();
-
 
 	return 0;
 }
@@ -8892,7 +8894,6 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
@@ -8903,8 +8904,8 @@ int main() {
 
 string中单个字符存取方式有两种
 
-* `char& operator[](int n); `     //通过[]方式取字符
-* `char& at(int n);   `                    //通过at方法获取字符
+* `char& operator[](int n); ` //通过[]方式取字符
+* `char& at(int n);   ` //通过at方法获取字符
 
 **示例：**
 
@@ -8937,7 +8938,6 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
@@ -8952,10 +8952,10 @@ int main() {
 
 **函数原型：**
 
-* `string& insert(int pos, const char* s);  `                //插入字符串
-* `string& insert(int pos, const string& str); `        //插入字符串
-* `string& insert(int pos, int n, char c);`                //在指定位置插入n个字符c
-* `string& erase(int pos, int n = npos);`                    //删除从Pos开始的n个字符
+* `string& insert(int pos, const char* s);  ` //插入字符串
+* `string& insert(int pos, const string& str); ` //插入字符串
+* `string& insert(int pos, int n, char c);` //在指定位置插入n个字符c
+* `string& erase(int pos, int n = npos);` //删除从Pos开始的n个字符
 
 **示例：**
 
@@ -8965,7 +8965,7 @@ void test01()
 {
 	string str = "hello";
 	str.insert(1, "111");
-	cout << str << endl;
+	cout << str << endl; //h111ello
 
 	str.erase(1, 3);  //从1号位置开始3个字符
 	cout << str << endl;
@@ -8974,13 +8974,12 @@ void test01()
 int main() {
 
 	test01();
-
-
+	
 	return 0;
 }
 ```
 
-**总结：**插入和删除的起始下标都是从0开始
+**总结：** 插入和删除的起始下标都是从0开始
 
 #### 3.1.9 string子串
 
@@ -9014,12 +9013,11 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
 
-**总结：**灵活的运用求子串功能，可以在实际开发中获取有效的信息
+**总结：** 灵活的运用求子串功能，可以在实际开发中获取有效的信息
 
 ### 3.2 vector容器
 
@@ -9037,6 +9035,8 @@ int main() {
 
 * 并不是在原空间之后续接新空间，而是找更大的内存空间，然后将原数据拷贝新空间，释放原空间
 
+![vector 容器的常用操作](../../Assets/cpp-syntax/vector-container-operations.jpg)
+
 * vector容器的迭代器是支持随机访问的迭代器
 
 #### 3.2.2 vector构造函数
@@ -9047,10 +9047,10 @@ int main() {
 
 **函数原型：**
 
-* `vector<T> v; `               		     //采用模板实现类实现，默认构造函数
-* `vector(v.begin(), v.end());   `       //将v[begin(), end())区间中的元素拷贝给本身。
-* `vector(n, elem);`                            //构造函数将n个elem拷贝给本身。
-* `vector(const vector &vec);`         //拷贝构造函数。
+* `vector<T> v; ` //采用模板实现类实现，默认构造函数
+* `vector(v.begin(), v.end());   ` //将v(begin(), end())区间中的元素拷贝给本身。
+* `vector(n, elem);` //构造函数将n个elem拷贝给本身。
+* `vector(const vector &vec);`  //拷贝构造函数。
 
 **示例：**
 
@@ -9067,7 +9067,7 @@ void printVector(vector<int>& v) {
 
 void test01()
 {
-	vector<int> v1; //无参构造
+	vector<int> v1; //默认构造，无参构造
 	for (int i = 0; i < 10; i++)
 	{
 		v1.push_back(i);
@@ -9088,12 +9088,11 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
 
-**总结：**vector的多种构造方式没有可比性，灵活使用即可
+**总结：** vector的多种构造方式没有可比性，灵活使用即可
 
 #### 3.2.3 vector赋值操作
 
@@ -9156,7 +9155,7 @@ int main() {
 
 总结： vector赋值方式比较简单，使用operator=，或者assign都可以
 
-#### 3.2.4  vector容量和大小
+#### 3.2.4 vector容量和大小
 
 **功能描述：**
 
