@@ -12,7 +12,7 @@ date: 2025-03-10
 
 版本为ubuntu22.04，ros2 humble
 
-通过sudo apt install gazebo和sudo apt install ros-humble-gazebo-*安装gazebo后，无法在终端中通过gazebo命令或者ros2 launch gazebo_ros gazebo.launch.py命令启动gazebo，只会卡在加载的那个方框进不去。（直接点击gazebo图标，是可以顺利打开的）。
+通过`sudo apt install gazebo和sudo apt install ros-humble-gazebo-*`安装gazebo后，无法在终端中通过gazebo命令或者`ros2 launch gazebo_ros gazebo.launch.py`命令启动gazebo，只会卡在加载的那个方框进不去。（直接点击gazebo图标，是可以顺利打开的）。
 
 网上都说，要先下载模型到~/.gazebo/models里，之后再重启就好了，我也照办了，但还是卡在那里。
 
@@ -20,7 +20,7 @@ date: 2025-03-10
 
 # 解决办法
 
-耗时一整个白天，辗转google,deepseek,bilibili,知乎，小鱼ros社区，古月居ros社区，最终解决办法：
+最终解决办法：
 
 打开.bashrc，在里面添加以下两行：
 
