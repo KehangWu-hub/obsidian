@@ -2989,6 +2989,11 @@ C++程序在执行时，将内存大方向划分为**4个区域**
 
 ​全局变量和静态变量存放在此
 
+静态变量使用 `static` 声明，在程序运行期间始终存在，并且只初始化一次。
+
+- 局部静态变量：作用域不变，但函数调用结束后仍保留上次的值
+- 全局静态变量：生命周期与全局变量相同，但只能在当前源文件中使用
+
 ​全局区还包含了常量区, 字符串常量和其他常量也存放在此
 
 ​==该区域的数据在程序结束后由操作系统释放==
@@ -3079,7 +3084,7 @@ int main() {
 ​由程序员分配释放,若程序员不释放,程序结束时由操作系统回收
 
 在C++中主要利用new在堆区开辟内存
-  
+
 **示例：**
 
 ```c++
@@ -4388,7 +4393,6 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
@@ -5582,7 +5586,7 @@ B 类称为父类 或 基类
 * 保护继承
 * 私有继承
 
-![C++ 三种继承方式下的成员访问权限](../../Assets/cpp-syntax/inheritance-access-control.png)
+![C++ 三种继承方式下的成员访问权限](../../Assets/cpp-syntax/inheritance-access-control-academic.svg)
 
 **示例：**
 
@@ -9035,7 +9039,7 @@ int main() {
 
 * 并不是在原空间之后续接新空间，而是找更大的内存空间，然后将原数据拷贝新空间，释放原空间
 
-![vector 容器的常用操作](../../Assets/cpp-syntax/vector-container-operations.jpg)
+![vector 容器的常用操作](../../Assets/cpp-syntax/vector-container-operations-academic.svg)
 
 * vector容器的迭代器是支持随机访问的迭代器
 
@@ -9147,7 +9151,6 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 
@@ -9163,19 +9166,15 @@ int main() {
 
 **函数原型：**
 
-* `empty(); `                            //判断容器是否为空
-
-* `capacity();`                      //容器的容量
-
-* `size();`                              //返回容器中元素的个数
-
-* `resize(int num);`             //重新指定容器的长度为num，若容器变长，则以默认值填充新位置。
-
-  					      //如果容器变短，则末尾超出容器长度的元素被删除。
-
-* `resize(int num, elem);`  //重新指定容器的长度为num，若容器变长，则以elem值填充新位置。
-
-  				              //如果容器变短，则末尾超出容器长度的元素被删除
+* `empty();`：判断容器是否为空。
+* `capacity();`：返回容器当前的容量。
+* `size();`：返回容器中元素的个数，即大小，容量永远大于等于大小（动态扩展。
+* `resize(int num);`：将容器的长度重新指定为 `num`。
+  * 容器变长时，以默认值填充新增位置。
+  * 容器变短时，删除末尾超出新长度的元素。
+* `resize(int num, elem);`：将容器的长度重新指定为 `num`。
+  * 容器变长时，以 `elem` 填充新增位置。
+  * 容器变短时，删除末尾超出新长度的元素。
 
 **示例：**
 
@@ -9205,8 +9204,8 @@ void test01()
 	else
 	{
 		cout << "v1不为空" << endl;
-		cout << "v1的容量 = " << v1.capacity() << endl;
-		cout << "v1的大小 = " << v1.size() << endl;
+		cout << "v1的容量 = " << v1.capacity() << endl; //13
+		cout << "v1的大小 = " << v1.size() << endl; //10
 	}
 
 	//resize 重新指定大小 ，若指定的更大，默认用0填充新位置，可以利用重载版本替换默认填充
@@ -9221,7 +9220,6 @@ void test01()
 int main() {
 
 	test01();
-
 
 	return 0;
 }
@@ -9243,13 +9241,13 @@ int main() {
 
 **函数原型：**
 
-* `push_back(ele);`                                         //尾部插入元素ele
-* `pop_back();`                                                //删除最后一个元素
-* `insert(const_iterator pos, ele);`        //迭代器指向位置pos插入元素ele
-* `insert(const_iterator pos, int count,ele);`//迭代器指向位置pos插入count个元素ele
-* `erase(const_iterator pos);`                     //删除迭代器指向的元素
-* `erase(const_iterator start, const_iterator end);`//删除迭代器从start到end之间的元素
-* `clear();`                                                        //删除容器中所有元素
+* `push_back(ele);` //尾部插入元素ele
+* `pop_back();` //删除最后一个元素
+* `insert(const_iterator pos, ele);` //迭代器指向位置pos插入元素ele
+* `insert(const_iterator pos, int count,ele);` //迭代器指向位置pos插入count个元素ele
+* `erase(const_iterator pos);` //删除迭代器指向的元素
+* `erase(const_iterator start, const_iterator end);` //删除迭代器从start到end之间的元素
+* `clear();` //删除容器中所有元素
 
 **示例：**
 
@@ -9299,7 +9297,6 @@ void test01()
 int main() {
 
 	test01();
-
 
 	return 0;
 }
