@@ -9535,7 +9535,7 @@ deque容器的迭代器也是支持随机访问的
 ```C++
 #include <deque>
 
-void printDeque(const deque<int>& d)
+void printDeque(const deque<int>& d) //加上const防止修改，相应的迭代器也要改成const_iterator
 {
 	for (deque<int>::const_iterator it = d.begin(); it != d.end(); it++) {
 		cout << *it << " ";
@@ -9626,7 +9626,6 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
@@ -9639,19 +9638,16 @@ int main() {
 
 * 对deque容器的大小进行操作
 
-**函数原型：**
+**常用成员函数：**
 
-* `deque.empty();`                       //判断容器是否为空
-
-* `deque.size();`                         //返回容器中元素的个数
-
-* `deque.resize(num);`                //重新指定容器的长度为num,若容器变长，则以默认值填充新位置。
-
-  			                             //如果容器变短，则末尾超出容器长度的元素被删除。
-
-* `deque.resize(num, elem);`     //重新指定容器的长度为num,若容器变长，则以elem值填充新位置。
-
-                                                       //如果容器变短，则末尾超出容器长度的元素被删除。
+* `deq.empty()`：判断容器是否为空
+* `deq.size()`：返回容器中的元素个数
+* `deq.resize(num)`：将容器长度重新指定为 `num`
+  * 容器变长时，使用默认值填充新位置
+  * 容器变短时，删除末尾超出新长度的元素
+* `deq.resize(num, elem)`：将容器长度重新指定为 `num`
+  * 容器变长时，使用 `elem` 填充新位置
+  * 容器变短时，删除末尾超出新长度的元素
 
 **示例：**
 
@@ -9699,7 +9695,6 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
@@ -9721,24 +9716,19 @@ int main() {
 
 两端插入操作：
 
-- `push_back(elem);`          //在容器尾部添加一个数据
-- `push_front(elem);`        //在容器头部插入一个数据
-- `pop_back();`                   //删除容器最后一个数据
-- `pop_front();`                 //删除容器第一个数据
+- `push_back(elem);` //在容器尾部添加一个数据
+- `push_front(elem);` //在容器头部插入一个数据
+- `pop_back();` //删除容器最后一个数据
+- `pop_front();` //删除容器第一个数据
 
 指定位置操作：
 
-* `insert(pos,elem);`         //在pos位置插入一个elem元素的拷贝，返回新数据的位置。
-
-* `insert(pos,n,elem);`     //在pos位置插入n个elem数据，无返回值。
-
-* `insert(pos,beg,end);`    //在pos位置插入[beg,end)区间的数据，无返回值。
-
-* `clear();`                           //清空容器的所有数据
-
-* `erase(beg,end);`             //删除[beg,end)区间的数据，返回下一个数据的位置。
-
-* `erase(pos);`                    //删除pos位置的数据，返回下一个数据的位置。
+* `insert(pos,elem);`  //在pos位置插入一个elem元素的拷贝，返回新数据的位置。
+* `insert(pos,n,elem);` //在pos位置插入n个elem数据，无返回值。
+* `insert(pos,beg,end);` //在pos位置插入\[beg,end)区间的数据，无返回值。
+* `clear();` //清空容器的所有数据
+* `erase(beg,end);` //删除\[beg,end)区间的数据，返回下一个数据的位置。
+* `erase(pos);` //删除pos位置的数据，返回下一个数据的位置。
 
 **示例：**
 
@@ -9825,7 +9815,6 @@ int main() {
 
     test03();
 
-
 	return 0;
 }
 
@@ -9847,10 +9836,10 @@ int main() {
 
 **函数原型：**
 
-- `at(int idx); `     //返回索引idx所指的数据
-- `operator[]; `      //返回索引idx所指的数据
-- `front(); `            //返回容器中第一个数据元素
-- `back();`              //返回容器中最后一个数据元素
+- `at(int idx); ` //返回索引idx所指的数据
+- `operator[]; ` //返回索引idx所指的数据
+- `front(); ` //返回容器中第一个数据元素
+- `back();` //返回容器中最后一个数据元素
 
 **示例：**
 
@@ -9897,7 +9886,6 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
@@ -9916,7 +9904,7 @@ int main() {
 
 **算法：**
 
-* `sort(iterator beg, iterator end)`  //对beg和end区间内元素进行排序
+* `sort(iterator beg, iterator end)`  //对beg和end区间内元素进行升序排序
 
 **示例：**
 
@@ -9940,11 +9928,12 @@ void test01()
 	d.push_back(10);
 	d.push_back(20);
 	d.push_front(100);
-	d.push_front(200);
+	d.push_front(200); 
 
-	printDeque(d);
+	printDeque(d); //200,100,20,10
 	sort(d.begin(), d.end());
-	printDeque(d);
+	printDeque(d); //10,20,100,200 升序
+	//支持随机访问的迭代器的容器，都可以使用sort算法进行排序
 
 }
 
@@ -9952,12 +9941,11 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
 
-总结：sort算法非常实用，使用时包含头文件 algorithm即可
+总结：sort算法非常实用，使用时包含头文件 algorithm 即可
 
 ### 3.4 案例-评委打分
 
