@@ -10,7 +10,7 @@ date: 2026-09-10
 PID （Proportional–Integral–Derivative）是一种闭环反馈控制器。它根据目标值与实际值之间的误差计算控制量，用于使位置、速度、温度等物理量跟踪目标。
 
 ```mermaid
-flowchart LR
+flowchart TB
     R[目标值 r] --> E((求差))
     Y[实际值 y] -->|负反馈| E
     E --> PID[PID 控制器]

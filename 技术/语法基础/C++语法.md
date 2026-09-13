@@ -1561,7 +1561,6 @@ int main() {
 		cout << score3[i] << endl;
 	}
 
-
 	return 0;
 }
 ```
@@ -3001,48 +3000,44 @@ C++程序在执行时，将内存大方向划分为**4个区域**
 **示例：**
 
 ```c++
-//全局变量
-int g_a = 10;
-int g_b = 10;
+#include <iostream>
+using namespace std;
 
-//全局常量
-const int c_g_a = 10;
-const int c_g_b = 10;
+int globalValue = 10;           // 全局变量：全局区
+const int globalConst = 20;     // 全局常量：常量区
 
-int main() {
+void countCalls()
+{
+	static int count = 0;         // 局部静态变量：全局区
+	count++;
+	cout << "函数第 " << count << " 次被调用，count 的地址："
+		 << &count << endl;
+}
 
-	//局部变量
-	int a = 10;
-	int b = 10;
+int main()
+{
+	int localValue = 30;          // 局部变量：栈区
+	const char* text = "hello";  // 字符串字面量：常量区
 
-	//打印地址
-	cout << "局部变量a地址为： " << &a << endl;
-	cout << "局部变量b地址为： " << &b << endl;
+	cout << "全局变量的地址：" << &globalValue << endl;
+	cout << "全局常量的地址：" << &globalConst << endl;
+	cout << "局部变量的地址：" << &localValue << endl;
+	cout << "字符串字面量的地址："
+		 << static_cast<const void*>(text) << endl;
 
-	cout << "全局变量g_a地址为： " <<  &g_a << endl;
-	cout << "全局变量g_b地址为： " <<  &g_b << endl;
-
-	//静态变量
-	static int s_a = 10;
-	static int s_b = 10;
-
-	cout << "静态变量s_a地址为： " << &s_a << endl;
-	cout << "静态变量s_b地址为： " << &s_b << endl;
-
-	cout << "字符串常量地址为： " << &"hello world" << endl;
-	cout << "字符串常量地址为： " << &"hello world1" << endl;
-
-	cout << "全局常量c_g_a地址为： " << &c_g_a << endl;
-	cout << "全局常量c_g_b地址为： " << &c_g_b << endl;
-
-	const int c_l_a = 10;
-	const int c_l_b = 10;
-	cout << "局部常量c_l_a地址为： " << &c_l_a << endl;
-	cout << "局部常量c_l_b地址为： " << &c_l_b << endl;
+	countCalls();
+	countCalls();
+	countCalls();
 
 	return 0;
 }
 ```
+
+地址的具体数值由运行环境决定，不需要记忆。这个例子主要说明：
+
+- 全局变量、全局常量和字符串字面量在整个程序运行期间都存在
+- 局部变量 `localValue` 存放在栈区，离开 `main` 后被释放
+- 局部静态变量 `count` 只初始化一次，因此三次调用会依次输出 `1` 、`2` 和 `3`
 
 总结：
 
@@ -9033,7 +9028,7 @@ int main() {
 
 **vector与普通数组区别：**
 
-* 不同之处在于数组是静态空间，而vector可以**动态扩展**
+* 不同之处在于数组是静态空间，而vector可以**动态扩展**。我个人的理解，vector就是动态的单端的数组。后面的deque是动态的双端的数组。
 
 **动态扩展：**
 
@@ -9318,10 +9313,10 @@ int main() {
 
 **函数原型：**
 
-* `at(int idx); `     //返回索引idx所指的数据
-* `operator[]; `       //返回索引idx所指的数据
-* `front(); `            //返回容器中第一个数据元素
-* `back();`              //返回容器中最后一个数据元素
+* `at(int idx); ` //返回索引idx所指的数据
+* `operator[](int idx); ` //返回索引idx所指的数据
+* `front(); ` //返回容器中第一个数据元素
+* `back();` //返回容器中最后一个数据元素
 
 **示例：**
 
@@ -9355,7 +9350,6 @@ void test01()
 int main() {
 
 	test01();
-
 
 	return 0;
 }
@@ -9420,19 +9414,19 @@ void test02()
 		v.push_back(i);
 	}
 
-	cout << "v的容量为：" << v.capacity() << endl;
-	cout << "v的大小为：" << v.size() << endl;
+	cout << "v的容量为：" << v.capacity() << endl; //138255
+	cout << "v的大小为：" << v.size() << endl; //100000
 
 	v.resize(3);
 
-	cout << "v的容量为：" << v.capacity() << endl;
-	cout << "v的大小为：" << v.size() << endl;
+	cout << "v的容量为：" << v.capacity() << endl; //138255
+	cout << "v的大小为：" << v.size() << endl; //3
 
-	//收缩内存
-	vector<int>(v).swap(v); //匿名对象
+	//太浪费了，巧用swap收缩内存
+	vector<int>(v).swap(v); //vector<int>(v)的作用是利用拷贝构造函数创建了一个新的对象，会按照v所实际使用的大小来创建匿名对象，而匿名对象会被系统回收不会占用空间
 
-	cout << "v的容量为：" << v.capacity() << endl;
-	cout << "v的大小为：" << v.size() << endl;
+	cout << "v的容量为：" << v.capacity() << endl; //3
+	cout << "v的大小为：" << v.size() << endl; //3
 }
 
 int main() {
@@ -9440,7 +9434,6 @@ int main() {
 	test01();
 
 	test02();
-
 
 	return 0;
 }
@@ -9457,7 +9450,7 @@ int main() {
 
 **函数原型：**
 
-* `reserve(int len);`//容器预留len个元素长度，预留位置不初始化，元素不可访问。
+* `reserve(int len);`//容器预留len个元素长度，预留位置不初始化，元素不可访问。reserve和reverse长得很像但是完全是两个东西，一个是“预留空间”，一个是“反转顺序”。
 
 **示例：**
 
@@ -9469,10 +9462,10 @@ void test01()
 	vector<int> v;
 
 	//预留空间
-	v.reserve(100000);
+	v.reserve(100000); //不加这句话，会多开辟很多次内存
 
-	int num = 0;
-	int* p = NULL;
+	int num = 0; //统计开辟内存次数
+	int* p = NULL; 
 	for (int i = 0; i < 100000; i++) {
 		v.push_back(i);
 		if (p != &v[0]) {
@@ -9481,13 +9474,12 @@ void test01()
 		}
 	}
 
-	cout << "num:" << num << endl;
+	cout << "num:" << num << endl; //不加v.reserve(100000)就是30,加了就是1
 }
 
 int main() {
 
 	test01();
-
 
 	return 0;
 }
@@ -9509,26 +9501,34 @@ int main() {
 * deque相对而言，对头部的插入删除速度回比vector快
 * vector访问元素时的速度会比deque快,这和两者内部实现有关
 
+![deque 常用操作](../../Assets/cpp-syntax/deque-container-operations-academic.svg)
+
 deque内部工作原理:
+
+![deque 内部结构](../../Assets/cpp-syntax/deque-internal-structure-academic.svg)
 
 deque内部有个**中控器**，维护每段缓冲区中的内容，缓冲区中存放真实数据
 
 中控器维护的是每个缓冲区的地址，使得使用deque时像一片连续的内存空间
 
-* deque容器的迭代器也是支持随机访问的
+deque容器的迭代器也是支持随机访问的
 
 #### 3.3.2 deque构造函数
 
 **功能描述：**
 
-* deque容器构造
+这里的构造函数与前面类中介绍的构造函数是同一个概念。`deque` 本身就是标准库定义的类，下面列出的是它的几种构造函数重载。
 
-**函数原型：**
+其中，拷贝构造函数不是另一种无关的函数，而是构造函数的一种：它使用已有的 `deque` 初始化一个新 `deque`。`deque` 也有析构函数，对象销毁时会自动调用，一般不需要手动处理。
 
-* `deque<T>` deqT;                      //默认构造形式
-* `deque(beg, end);`                  //构造函数将[beg, end)区间中的元素拷贝给本身。
-* `deque(n, elem);`                    //构造函数将n个elem拷贝给本身。
-* `deque(const deque &deq);`   //拷贝构造函数
+**常用构造方式：**
+
+* `deque<T> deq;` ：默认构造，创建空容器
+* `deque<T> deq(beg, end);` ：区间构造，使用 `[beg, end)` 中的元素初始化容器
+* `deque<T> deq(n, elem);` ：填充构造，使用 `n` 个 `elem` 初始化容器
+* `deque<T> deq2(deq1);` ：拷贝构造，使用已有容器 `deq1` 初始化新容器 `deq2`
+
+> `deque<int> d2(d1);` 是创建新对象，调用拷贝构造函数；`d2 = d1;` 是给已有对象赋值，调用拷贝赋值运算符。
 
 **示例：**
 
@@ -9566,12 +9566,11 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
 
-**总结：**deque容器和vector容器的构造方式几乎一致，灵活使用即可
+**总结：** deque容器和vector容器的构造方式几乎一致，灵活使用即可
 
 #### 3.3.3 deque赋值操作
 

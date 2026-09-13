@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="640" viewBox="0 150 1600 640" role="img" aria-labelledby="title desc">
+  <title id="title">std::deque 内部结构</title>
+  <desc id="desc">以简约学术风格展示 deque 的中控器、分段缓冲区、逻辑顺序与双端扩展方式。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0 0L9 4.5L0 9Z" fill="#334155"/>
+    </marker>
+    <marker id="arrowBlue" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0 0L9 4.5L0 9Z" fill="#356a9a"/>
+    </marker>
+    <style>
+      .sans{font-family:"Noto Sans CJK SC","Source Han Sans SC","Microsoft YaHei",sans-serif}
+      .mono{font-family:"JetBrains Mono","Cascadia Mono",Consolas,monospace}
+      .ink{fill:#172033}.muted{fill:#64748b}.blue{fill:#356a9a}
+      .rule{stroke:#334155;stroke-width:2;fill:none}.guide{stroke:#94a3b8;stroke-width:1.6;fill:none}
+      .arrow{stroke:#334155;stroke-width:2;fill:none;marker-end:url(#arrow)}
+      .arrow-blue{stroke:#356a9a;stroke-width:2;fill:none;marker-end:url(#arrowBlue)}
+    </style>
+  </defs>
+
+  <rect width="1600" height="900" fill="#ffffff"/>
+
+  <!-- Controller -->
+  <text x="190" y="229" class="sans ink" font-size="23" font-weight="600">中控器</text>
+  <text x="190" y="260" class="mono muted" font-size="18">map</text>
+  <g stroke="#334155" stroke-width="2">
+    <rect x="380" y="185" width="140" height="92" fill="#f8fafc"/>
+    <rect x="520" y="185" width="140" height="92" fill="#eef4f8"/>
+    <rect x="660" y="185" width="140" height="92" fill="#eef4f8"/>
+    <rect x="800" y="185" width="140" height="92" fill="#eef4f8"/>
+    <rect x="940" y="185" width="140" height="92" fill="#eef4f8"/>
+    <rect x="1080" y="185" width="140" height="92" fill="#f8fafc"/>
+  </g>
+  <g text-anchor="middle" class="mono muted" font-size="17">
+    <text x="450" y="222">map[0]</text><text x="590" y="222">map[1]</text>
+    <text x="730" y="222">map[2]</text><text x="870" y="222">map[3]</text>
+    <text x="1010" y="222">map[4]</text><text x="1150" y="222">map[5]</text>
+  </g>
+  <g text-anchor="middle" class="sans" font-size="19">
+    <text x="450" y="253" class="muted">预留</text>
+    <text x="590" y="253" class="blue">指针</text><text x="730" y="253" class="blue">指针</text>
+    <text x="870" y="253" class="blue">指针</text><text x="1010" y="253" class="blue">指针</text>
+    <text x="1150" y="253" class="muted">预留</text>
+  </g>
+
+  <!-- Pointers from map entries to buffers -->
+  <path d="M590 277C590 330 270 330 270 418" class="arrow-blue"/>
+  <path d="M730 277C730 342 625 342 625 418" class="arrow-blue"/>
+  <path d="M870 277C870 342 980 342 980 418" class="arrow-blue"/>
+  <path d="M1010 277C1010 330 1335 330 1335 418" class="arrow-blue"/>
+
+  <!-- Buffers -->
+  <text x="130" y="397" class="sans ink" font-size="23" font-weight="600">分段缓冲区</text>
+  <g stroke="#334155" stroke-width="2">
+    <rect x="130" y="430" width="70" height="100" fill="#eef4f8"/><rect x="200" y="430" width="70" height="100" fill="#f8fafc"/>
+    <rect x="270" y="430" width="70" height="100" fill="#f8fafc"/><rect x="340" y="430" width="70" height="100" fill="#f8fafc"/>
+
+    <rect x="485" y="430" width="70" height="100" fill="#eef4f8"/><rect x="555" y="430" width="70" height="100" fill="#f8fafc"/>
+    <rect x="625" y="430" width="70" height="100" fill="#f8fafc"/><rect x="695" y="430" width="70" height="100" fill="#f8fafc"/>
+
+    <rect x="840" y="430" width="70" height="100" fill="#eef4f8"/><rect x="910" y="430" width="70" height="100" fill="#f8fafc"/>
+    <rect x="980" y="430" width="70" height="100" fill="#f8fafc"/><rect x="1050" y="430" width="70" height="100" fill="#f8fafc"/>
+
+    <rect x="1195" y="430" width="70" height="100" fill="#eef4f8"/><rect x="1265" y="430" width="70" height="100" fill="#f8fafc"/>
+    <rect x="1335" y="430" width="70" height="100" fill="#f8fafc"/><rect x="1405" y="430" width="70" height="100" fill="#f8fafc"/>
+  </g>
+  <g text-anchor="middle" class="mono ink" font-size="27">
+    <text x="165" y="491">0</text><text x="235" y="491">1</text><text x="305" y="491">2</text><text x="375" y="491">3</text>
+    <text x="520" y="491">4</text><text x="590" y="491">5</text><text x="660" y="491">6</text><text x="730" y="491">7</text>
+    <text x="875" y="491">8</text><text x="945" y="491">9</text><text x="1015" y="491">10</text><text x="1085" y="491">11</text>
+    <text x="1230" y="491">12</text><text x="1300" y="491">13</text><text x="1370" y="491">14</text><text x="1440" y="491">15</text>
+  </g>
+  <g text-anchor="middle" class="mono muted" font-size="17">
+    <text x="270" y="562">buffer 0</text><text x="625" y="562">buffer 1</text>
+    <text x="980" y="562">buffer 2</text><text x="1335" y="562">buffer 3</text>
+  </g>
+
+  <!-- Logical sequence -->
+  <path d="M165 615H1440" class="arrow"/>
+  <text x="800" y="654" text-anchor="middle" class="sans ink" font-size="21">迭代器屏蔽缓冲区边界，元素在逻辑上保持连续</text>
+
+  <!-- Double-ended operations -->
+  <path d="M235 735H145" class="arrow-blue"/>
+  <text x="250" y="727" class="mono blue" font-size="22">push_front(x)</text>
+  <text x="250" y="757" class="sans muted" font-size="18">头端空间不足时增加缓冲区</text>
+
+  <path d="M1365 735H1455" class="arrow-blue"/>
+  <text x="1350" y="727" text-anchor="end" class="mono blue" font-size="22">push_back(x)</text>
+  <text x="1350" y="757" text-anchor="end" class="sans muted" font-size="18">尾端空间不足时增加缓冲区</text>
+
+</svg>
