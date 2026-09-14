@@ -1513,7 +1513,7 @@ bool contains(const int numbers[], int length, int target) {
 
 一维数组定义的三种方式：
 
-1. ` 数据类型  数组名[ 数组长度 ]; `
+1. `数据类型  数组名[ 数组长度 ]; `
 2. `数据类型  数组名[ 数组长度 ] = { 值1，值2 ...};`
 3. `数据类型  数组名[ ] = { 值1，值2 ...};`
 
@@ -1653,10 +1653,10 @@ int main() {
 
 二维数组定义的四种方式：
 
-1. ` 数据类型  数组名[ 行数 ][ 列数 ]; `
+1. `数据类型  数组名[ 行数 ][ 列数 ]; `
 2. `数据类型  数组名[ 行数 ][ 列数 ] = { {数据1，数据2 } ，{数据3，数据4 } };`
 3. `数据类型  数组名[ 行数 ][ 列数 ] = { 数据1，数据2，数据3，数据4};`
-4. ` 数据类型  数组名[  ][ 列数 ] = { 数据1，数据2，数据3，数据4};`
+4. `数据类型  数组名[  ][ 列数 ] = { 数据1，数据2，数据3，数据4};`
 
 > 建议：以上4种定义方式，==第二种更加直观，提高代码的可读性==
 
@@ -11164,8 +11164,7 @@ void test01()
 int main() {
 
 	test01();
-
-
+	
 	return 0;
 }
 ```
@@ -11204,7 +11203,6 @@ void test01()
 int main() {
 
 	test01();
-
 
 	return 0;
 }
@@ -11252,7 +11250,7 @@ void test01()
 	cout << endl;
 
 	//指定排序规则
-	set<int,MyCompare> s2;
+	set<int,MyCompare> s2; //重载运算符是仿函数，仿函数本质也是数据类型，可以放这里，函数不行
 	s2.insert(10);
 	s2.insert(40);
 	s2.insert(20);
@@ -11268,7 +11266,6 @@ void test01()
 int main() {
 
 	test01();
-
 
 	return 0;
 }
@@ -11328,7 +11325,6 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
@@ -11344,9 +11340,9 @@ int main() {
 **简介：**
 
 * map中所有元素都是pair
-* pair中第一个元素为key（键值），起到索引作用，第二个元素为value（实值）
+* pair中第一个元素为key（键值），起到索引作用，第二个元素为value（实值），相当于是python里的字典dict
 * 所有元素都会根据元素的键值自动排序
-
+ 
 **本质：**
 
 * map/multimap属于**关联式容器**，底层结构是用二叉树实现。
@@ -11357,10 +11353,11 @@ int main() {
 
 map和multimap**区别**：
 
-- map不允许容器中有重复key值元素
+- map不允许容器中有重复**key值**元素
 - multimap允许容器中有重复key值元素
+- value值一直都是允许的
 
-#### 3.9.2  map构造和赋值
+#### 3.9.2 map构造和赋值
 
 **功能描述：**
 
@@ -11370,12 +11367,12 @@ map和multimap**区别**：
 
 **构造：**
 
-* `map<T1, T2> mp;`                     //map默认构造函数:
-* `map(const map &mp);`             //拷贝构造函数
+* `map<T1, T2> mp;` //map默认构造函数:
+* `map(const map &mp);` //拷贝构造函数
 
 **赋值：**
 
-* `map& operator=(const map &mp);`    //重载等号操作符
+* `map& operator=(const map &mp);` //重载等号操作符
 
 **示例：**
 
@@ -11411,7 +11408,6 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
@@ -11426,9 +11422,9 @@ int main() {
 
 函数原型：
 
-- `size();`          //返回容器中元素的数目
-- `empty();`        //判断容器是否为空
-- `swap(st);`      //交换两个集合容器
+- `size();` //返回容器中元素的数目
+- `empty();` //判断容器是否为空
+- `swap(st);` //交换两个集合容器
 
 **示例：**
 
@@ -11492,7 +11488,6 @@ int main() {
 
 	test02();
 
-
 	return 0;
 }
 ```
@@ -11511,11 +11506,11 @@ int main() {
 
 **函数原型：**
 
-- `insert(elem);`           //在容器中插入元素。
-- `clear();`                    //清除所有元素
-- `erase(pos);`              //删除pos迭代器所指的元素，返回下一个元素的迭代器。
-- `erase(beg, end);`    //删除区间[beg,end)的所有元素 ，返回下一个元素的迭代器。
-- `erase(key);`            //删除容器中值为key的元素。
+- `insert(elem);` //在容器中插入元素。
+- `clear();` //清除所有元素
+- `erase(pos);` //删除pos迭代器所指的元素，返回下一个元素的迭代器。
+- `erase(beg, end);` //删除区间[beg,end)的所有元素 ，返回下一个元素的迭代器。
+- `erase(key);` //删除容器中值为key的元素。
 
 **示例：**
 
@@ -11538,9 +11533,9 @@ void test01()
 	//第一种插入方式
 	m.insert(pair<int, int>(1, 10));
 	//第二种插入方式
-	m.insert(make_pair(2, 20));
+	m.insert(make_pair(2, 20)); //make_pair是C++标准库自带的函数
 	//第三种插入方式
-	m.insert(map<int, int>::value_type(3, 30));
+	m.insert(map<int, int>::value_type(3, 30)); //不常用，可以不理会
 	//第四种插入方式
 	m[4] = 40;
 	printMap(m);
@@ -11562,7 +11557,6 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
@@ -11583,8 +11577,8 @@ int main() {
 
 **函数原型：**
 
-- `find(key);`                  //查找key是否存在,若存在，返回该键的元素的迭代器；若不存在，返回set.end();
-- `count(key);`                //统计key的元素个数
+- `find(key);` //查找key是否存在,若存在，返回该键的元素的迭代器；若不存在，返回`set.end()`; `end()` **不是最后一个元素**，而是**最后一个元素的后面**，所以不用担心找的是最后一个元素的问题
+- `count(key);` //统计key的元素个数
 
 **示例：**
 
@@ -11619,7 +11613,6 @@ void test01()
 int main() {
 
 	test01();
-
 
 	return 0;
 }
@@ -11672,7 +11665,6 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
@@ -11687,7 +11679,7 @@ int main() {
 #### 3.10.1 案例描述
 
 * 公司今天招聘了10个员工（ABCDEFGHIJ），10名员工进入公司之后，需要指派员工在那个部门工作
-* 员工信息有: 姓名  工资组成；部门分为：策划、美术、研发
+* 员工信息有: 姓名、工资组成；部门分为：策划、美术、研发
 * 随机给10名员工分配部门和工资
 * 通过multimap进行信息的插入  key(部门编号) value(员工)
 * 分部门显示员工信息
@@ -11804,7 +11796,6 @@ int main() {
 	multimap<int, Worker>mWorker;
 	setGroup(vWorker, mWorker);
 
-
 	//3、分组显示员工
 	showWorkerByGourp(mWorker);
 
@@ -11814,7 +11805,6 @@ int main() {
 	//	cout << "姓名： " << it->m_Name << " 工资： " << it->m_Salary << endl;
 	//}
 
-
 	return 0;
 }
 ```
@@ -11823,7 +11813,7 @@ int main() {
 
 * 当数据以键值对形式存在，可以考虑用map 或 multimap
 
-## 4 STL- 函数对象
+## 4 STL函数对象/仿函数
 
 ### 4.1 函数对象
 
@@ -11889,7 +11879,7 @@ void test02()
 	myPrint("hello world");
 	myPrint("hello world");
 	myPrint("hello world");
-	cout << "myPrint调用次数为： " << myPrint.count << endl;
+	cout << "myPrint调用次数为： " << myPrint.count << endl; //3
 }
 
 //3、函数对象可以作为参数传递
@@ -11910,7 +11900,6 @@ int main() {
 	//test02();
 	test03();
 
-
 	return 0;
 }
 ```
@@ -11918,6 +11907,74 @@ int main() {
 总结：
 
 * 仿函数写法非常灵活，可以作为参数进行传递。
+
+补充：**区分构造函数和函数对象**，尽管他们能实现的功能类似
+
+例如：
+
+```C++
+class MyAdd
+{
+public:
+    int num;
+
+    MyAdd(int n)
+    {
+        num = n;
+    }
+
+    int operator()(int x)
+    {
+        return x + num;
+    }
+};
+```
+
+使用：
+
+```C++
+MyAdd add10(10);
+
+cout << add10(5);
+```
+
+输出：
+
+```C++
+15
+```
+
+这里：
+
+```C++
+MyAdd add10(10);
+```
+
+调用的是**构造函数**：
+
+```C++
+MyAdd(int n)
+```
+
+把 `num` 初始化成 `10`。
+
+然后：
+
+```C++
+add10(5);
+```
+
+调用的是：
+
+```C++
+operator()(5)
+```
+
+得到：
+
+```C++
+5 + 10 = 15
+```
 
 ### 4.2  谓词
 
@@ -11953,6 +12010,8 @@ void test01() {
 	}
 
 	vector<int>::iterator it = find_if(v.begin(), v.end(), GreaterFive());
+	//find_if也是C++自带的
+	//这里的GreaterFive()并未传入对象，相当于是创建一个 GreaterFive 临时对象，然后传给 find_if，然后find_if内部会反复调用这个对象
 	if (it == v.end()) {
 		cout << "没找到!" << endl;
 	}
@@ -11965,7 +12024,6 @@ void test01() {
 int main() {
 
 	test01();
-
 
 	return 0;
 }
@@ -12021,7 +12079,6 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
@@ -12036,12 +12093,12 @@ int main() {
 
 * STL内建了一些函数对象
 
+>通俗讲就是STL内已经重载了很多的(),可以直接拿来用，`#include<functional>`一下就能用
+
 **分类:**
 
 * 算术仿函数
-
 * 关系仿函数
-
 * 逻辑仿函数
 
 **用法：**
@@ -12058,17 +12115,17 @@ int main() {
 
 **仿函数原型：**
 
-* `template<class T> T plus<T>`                //加法仿函数
-* `template<class T> T minus<T>`              //减法仿函数
-* `template<class T> T multiplies<T>`    //乘法仿函数
-* `template<class T> T divides<T>`         //除法仿函数
-* `template<class T> T modulus<T>`         //取模仿函数
-* `template<class T> T negate<T>`           //取反仿函数
+* `template<class T> T plus<T>` //加法仿函数
+* `template<class T> T minus<T>` //减法仿函数
+* `template<class T> T multiplies<T>` //乘法仿函数
+* `template<class T> T divides<T>` //除法仿函数
+* `template<class T> T modulus<T>` //取模仿函数
+* `template<class T> T negate<T>` //取反仿函数
 
 **示例：**
 
 ```C++
-#include <functional>
+#include <functional> //内建函数对象头文件
 //negate
 void test01()
 {
@@ -12079,7 +12136,7 @@ void test01()
 //plus
 void test02()
 {
-	plus<int> p;
+	plus<int> p; //这里只用写一个int
 	cout << p(10, 20) << endl;
 }
 
@@ -12087,7 +12144,6 @@ int main() {
 
 	test01();
 	test02();
-
 
 	return 0;
 }
@@ -12103,12 +12159,12 @@ int main() {
 
 **仿函数原型：**
 
-* `template<class T> bool equal_to<T>`                    //等于
-* `template<class T> bool not_equal_to<T>`            //不等于
-* `template<class T> bool greater<T>`                      //大于
-* `template<class T> bool greater_equal<T>`          //大于等于
-* `template<class T> bool less<T>`                           //小于
-* `template<class T> bool less_equal<T>`               //小于等于
+* `template<class T> bool equal_to<T>` //等于
+* `template<class T> bool not_equal_to<T>` //不等于
+* `template<class T> bool greater<T>` //大于
+* `template<class T> bool greater_equal<T>` //大于等于
+* `template<class T> bool less<T>` //小于
+* `template<class T> bool less_equal<T>` //小于等于
 
 **示例：**
 
@@ -12155,7 +12211,6 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
@@ -12170,9 +12225,9 @@ int main() {
 
 **函数原型：**
 
-* `template<class T> bool logical_and<T>`              //逻辑与
-* `template<class T> bool logical_or<T>`                //逻辑或
-* `template<class T> bool logical_not<T>`              //逻辑非
+* `template<class T> bool logical_and<T>` //逻辑与
+* `template<class T> bool logical_or<T>` //逻辑或
+* `template<class T> bool logical_not<T>` //逻辑非
 
 **示例：**
 
@@ -12208,7 +12263,6 @@ void test01()
 int main() {
 
 	test01();
-
 
 	return 0;
 }
@@ -12286,10 +12340,10 @@ void test01() {
 	}
 
 	//遍历算法
-	for_each(v.begin(), v.end(), print01);
+	for_each(v.begin(), v.end(), print01); //普通函数放个函数名就行
 	cout << endl;
 
-	for_each(v.begin(), v.end(), print02());
+	for_each(v.begin(), v.end(), print02()); //仿函数需要()，因为()才是函数
 	cout << endl;
 }
 
@@ -12297,12 +12351,11 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
 
-**总结：**for_each在实际开发中是最常用遍历算法，需要熟练掌握
+**总结：** for_each在实际开发中是最常用遍历算法，需要熟练掌握
 
 #### 5.1.2 transform
 
@@ -12320,7 +12373,7 @@ int main() {
 
 //beg2 目标容器开始迭代器
 
-//_func 函数或者函数对象
+//\_func 函数或者函数对象
 
 **示例：**
 
@@ -12370,7 +12423,6 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
@@ -12385,12 +12437,12 @@ int main() {
 
 **算法简介：**
 
-- `find`                     //查找元素
-- `find_if`               //按条件查找元素
-- `adjacent_find`    //查找相邻重复元素
-- `binary_search`    //二分查找法
-- `count`                   //统计元素个数
-- `count_if`             //按条件统计元素个数
+- `find` //查找元素
+- `find_if` //按条件查找元素
+- `adjacent_find` //查找相邻重复元素
+- `binary_search` //二分查找法
+- `count` //统计元素个数
+- `count_if` //按条件统计元素个数
 
 #### 5.2.1 find
 
