@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="560" viewBox="0 0 1600 560" role="img" aria-labelledby="title desc">
+  <title id="title">std::list 双向循环链表结构</title>
+  <desc id="desc">以简约学术风格展示带哨兵结点的双向循环链表，每个数据结点包含 prev、data 和 next。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0 0L9 4.5L0 9Z" fill="#334155"/>
+    </marker>
+    <marker id="arrowBlue" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0 0L9 4.5L0 9Z" fill="#356a9a"/>
+    </marker>
+    <style>
+      .sans{font-family:"Noto Sans CJK SC","Source Han Sans SC","Microsoft YaHei",sans-serif}
+      .mono{font-family:"JetBrains Mono","Cascadia Mono",Consolas,monospace}
+      .ink{fill:#172033}.muted{fill:#64748b}.blue{fill:#356a9a}
+      .rule{stroke:#334155;stroke-width:2;fill:none}.guide{stroke:#94a3b8;stroke-width:1.6;fill:none}
+      .arrow{stroke:#334155;stroke-width:2;fill:none;marker-end:url(#arrow)}
+      .arrow-blue{stroke:#356a9a;stroke-width:2;fill:none;marker-end:url(#arrowBlue)}
+    </style>
+  </defs>
+
+  <rect width="1600" height="560" fill="#ffffff"/>
+
+  <!-- Sentinel node -->
+  <rect x="150" y="205" width="190" height="130" fill="#eef4f8" stroke="#334155" stroke-width="2"/>
+  <text x="245" y="263" text-anchor="middle" class="mono blue" font-size="25">end()</text>
+  <text x="245" y="300" text-anchor="middle" class="sans muted" font-size="18">哨兵结点</text>
+
+  <!-- Data nodes -->
+  <g stroke="#334155" stroke-width="2">
+    <rect x="440" y="205" width="280" height="130" fill="#ffffff"/>
+    <rect x="440" y="205" width="70" height="130" fill="#f8fafc"/>
+    <rect x="510" y="205" width="140" height="130" fill="#eef4f8"/>
+    <rect x="650" y="205" width="70" height="130" fill="#f8fafc"/>
+
+    <rect x="760" y="205" width="280" height="130" fill="#ffffff"/>
+    <rect x="760" y="205" width="70" height="130" fill="#f8fafc"/>
+    <rect x="830" y="205" width="140" height="130" fill="#eef4f8"/>
+    <rect x="970" y="205" width="70" height="130" fill="#f8fafc"/>
+
+    <rect x="1080" y="205" width="280" height="130" fill="#ffffff"/>
+    <rect x="1080" y="205" width="70" height="130" fill="#f8fafc"/>
+    <rect x="1150" y="205" width="140" height="130" fill="#eef4f8"/>
+    <rect x="1290" y="205" width="70" height="130" fill="#f8fafc"/>
+  </g>
+
+  <g text-anchor="middle" class="mono muted" font-size="16">
+    <text x="475" y="230">prev</text><text x="685" y="230">next</text>
+    <text x="795" y="230">prev</text><text x="1005" y="230">next</text>
+    <text x="1115" y="230">prev</text><text x="1325" y="230">next</text>
+  </g>
+  <g text-anchor="middle" class="mono ink" font-size="31">
+    <text x="580" y="283">A</text>
+    <text x="900" y="283">B</text>
+    <text x="1220" y="283">C</text>
+  </g>
+
+  <!-- Forward links -->
+  <path d="M340 232H430" class="arrow-blue"/>
+  <path d="M720 232H750" class="arrow-blue"/>
+  <path d="M1040 232H1070" class="arrow-blue"/>
+  <path d="M1360 232C1450 232 1450 82 245 82C170 82 170 150 170 195" class="arrow-blue"/>
+  <text x="800" y="54" text-anchor="middle" class="mono blue" font-size="22">next · ++it</text>
+
+  <!-- Backward links -->
+  <path d="M440 308H350" class="arrow"/>
+  <path d="M760 308H730" class="arrow"/>
+  <path d="M1080 308H1050" class="arrow"/>
+  <path d="M245 345C245 480 1220 480 1220 345" class="arrow"/>
+  <text x="800" y="518" text-anchor="middle" class="mono ink" font-size="22">prev · --it</text>
+
+  <!-- Iterator entry -->
+  <text x="580" y="390" text-anchor="middle" class="mono blue" font-size="23">begin()</text>
+  <text x="580" y="420" text-anchor="middle" class="sans muted" font-size="18">指向首结点</text>
+  <path d="M580 378V345" class="arrow-blue"/>
+
+  <!-- Non-contiguous storage cue -->
+  <text x="1440" y="272" text-anchor="middle" class="sans muted" font-size="18">结点的物理地址</text>
+  <text x="1440" y="301" text-anchor="middle" class="sans muted" font-size="18">不必连续</text>
+</svg>

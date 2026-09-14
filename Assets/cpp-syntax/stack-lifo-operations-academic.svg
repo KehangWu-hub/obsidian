@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="560" viewBox="0 0 1600 560" role="img" aria-labelledby="title desc">
+  <title id="title">std::stack 先进后出示意</title>
+  <desc id="desc">以简约学术风格展示 stack 只能在栈顶执行 push、pop 和 top 操作。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0 0L9 4.5L0 9Z" fill="#334155"/>
+    </marker>
+    <marker id="arrowBlue" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0 0L9 4.5L0 9Z" fill="#356a9a"/>
+    </marker>
+    <style>
+      .sans{font-family:"Noto Sans CJK SC","Source Han Sans SC","Microsoft YaHei",sans-serif}
+      .mono{font-family:"JetBrains Mono","Cascadia Mono",Consolas,monospace}
+      .ink{fill:#172033}.muted{fill:#64748b}.blue{fill:#356a9a}
+      .rule{stroke:#334155;stroke-width:2;fill:none}.guide{stroke:#94a3b8;stroke-width:1.6;fill:none}
+      .arrow{stroke:#334155;stroke-width:2;fill:none;marker-end:url(#arrow)}
+      .arrow-blue{stroke:#356a9a;stroke-width:2;fill:none;marker-end:url(#arrowBlue)}
+    </style>
+  </defs>
+
+  <rect width="1600" height="560" fill="#ffffff"/>
+
+  <!-- Stack container -->
+  <path d="M580 150V480H1020V150" class="rule"/>
+  <text x="800" y="520" text-anchor="middle" class="sans muted" font-size="18">栈底</text>
+
+  <!-- Elements -->
+  <g stroke="#334155" stroke-width="2">
+    <rect x="600" y="200" width="400" height="88" fill="#eef4f8"/>
+    <rect x="600" y="288" width="400" height="88" fill="#f8fafc"/>
+    <rect x="600" y="376" width="400" height="88" fill="#f8fafc"/>
+  </g>
+  <g text-anchor="middle" class="mono ink" font-size="31">
+    <text x="800" y="254">C</text>
+    <text x="800" y="342">B</text>
+    <text x="800" y="430">A</text>
+  </g>
+  <text x="620" y="187" class="sans blue" font-size="20" font-weight="600">栈顶</text>
+
+  <!-- Push and pop share the only opening -->
+  <text x="685" y="62" text-anchor="middle" class="mono blue" font-size="24">push(x)</text>
+  <text x="685" y="91" text-anchor="middle" class="sans muted" font-size="18">从栈顶入栈</text>
+  <path d="M685 105V187" class="arrow-blue"/>
+
+  <path d="M915 187V105" class="arrow"/>
+  <text x="915" y="62" text-anchor="middle" class="mono ink" font-size="24">pop()</text>
+  <text x="915" y="91" text-anchor="middle" class="sans muted" font-size="18">从栈顶出栈</text>
+
+  <!-- Top access -->
+  <path d="M1195 244H1010" class="arrow-blue"/>
+  <text x="1225" y="235" class="mono blue" font-size="24">top()</text>
+  <text x="1225" y="265" class="sans muted" font-size="18">只访问栈顶元素 C</text>
+
+  <!-- LIFO order -->
+  <text x="190" y="235" class="sans ink" font-size="22" font-weight="600">入栈顺序</text>
+  <text x="190" y="282" class="mono blue" font-size="28">A → B → C</text>
+  <text x="190" y="352" class="sans ink" font-size="22" font-weight="600">出栈顺序</text>
+  <text x="190" y="399" class="mono blue" font-size="28">C → B → A</text>
+  <text x="190" y="445" class="sans muted" font-size="19">Last In, First Out</text>
+
+  <!-- Size state -->
+  <line x1="1100" y1="335" x2="1100" y2="450" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="1140" y="374" class="mono ink" font-size="23">size() = 3</text>
+  <text x="1140" y="420" class="mono ink" font-size="23">empty() = false</text>
+</svg>

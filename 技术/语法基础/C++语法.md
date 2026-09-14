@@ -9951,7 +9951,7 @@ int main() {
 
 #### 3.4.1 案例描述
 
-有5名选手：选手ABCDE，10个评委分别对每一名选手打分，去除最高分，去除评委中最低分，取平均分。
+有5名选手：选手ABCDE，10个评委分别对每一名选手打分，去除最高分，去除最低分，取平均分。
 
 #### 3.4.2 实现步骤
 
@@ -9964,6 +9964,14 @@ int main() {
 **示例代码：**
 
 ```C++
+#include<iostream>
+using namespace std;
+#include<string>
+#include<vector>
+#include<algorithm>
+#include<deque>
+#include<ctime>
+
 //选手类
 class Person
 {
@@ -10031,7 +10039,7 @@ void setScore(vector<Person>&v)
 
 		int avg = sum / d.size();
 
-		//将平均分 赋值给选手身上
+		//将平均分赋值给选手身上
 		it->m_Score = avg;
 	}
 
@@ -10066,7 +10074,6 @@ int main() {
 	//3、显示最后得分
 	showScore(v);
 
-
 	return 0;
 }
 ```
@@ -10077,7 +10084,9 @@ int main() {
 
 #### 3.5.1 stack 基本概念
 
-**概念：**stack是一种**先进后出**(First In Last Out,FILO)的数据结构，它只有一个出口
+**概念：** stack是一种**先进后出**(First In Last Out,FILO)的数据结构，它只有一个出口
+
+![stack 先进后出与栈顶操作](../../Assets/cpp-syntax/stack-lifo-operations-academic.svg)
 
 栈中只有顶端的元素才可以被外界使用，因此栈不允许有遍历行为
 
@@ -10085,31 +10094,29 @@ int main() {
 
 栈中弹出数据称为  --- **出栈**  `pop`
 
-生活中的栈：
-
 #### 3.5.2 stack 常用接口
 
 功能描述：栈容器常用的对外接口
 
 构造函数：
 
-* `stack<T> stk;`                                 //stack采用模板类实现， stack对象的默认构造形式
-* `stack(const stack &stk);`            //拷贝构造函数
+* `stack<T> stk;` //stack采用模板类实现， stack对象的默认构造形式
+* `stack(const stack &stk);` //拷贝构造函数
 
 赋值操作：
 
-* `stack& operator=(const stack &stk);`           //重载等号操作符
+* `stack& operator=(const stack &stk);` /重载等号操作符
 
 数据存取：
 
-* `push(elem);`      //向栈顶添加元素
-* `pop();`                //从栈顶移除第一个元素
-* `top(); `                //返回栈顶元素
+* `push(elem);` //向栈顶添加元素
+* `pop();` //从栈顶移除第一个元素
+* `top(); ` //返回栈顶元素
 
 大小操作：
 
-* `empty();`            //判断堆栈是否为空
-* `size(); `              //返回栈的大小
+* `empty();` //判断堆栈是否为空
+* `size(); ` //返回栈的大小
 
 **示例：**
 
@@ -10141,7 +10148,6 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
@@ -10158,7 +10164,9 @@ int main() {
 
 #### 3.6.1 queue 基本概念
 
-**概念：**Queue是一种**先进先出**(First In First Out,FIFO)的数据结构，它有两个出口
+**概念：** Queue是一种**先进先出**(First In First Out,FIFO)的数据结构，它有两个出口
+
+![queue 先进先出与队头队尾操作](../../Assets/cpp-syntax/queue-fifo-operations-academic.svg)
 
 队列容器允许从一端新增元素，从另一端移除元素
 
@@ -10168,32 +10176,30 @@ int main() {
 
 队列中出数据称为 --- **出队**    `pop`
 
-生活中的队列：
-
 #### 3.6.2 queue 常用接口
 
 功能描述：栈容器常用的对外接口
 
 构造函数：
 
-- `queue<T> que;`                                 //queue采用模板类实现，queue对象的默认构造形式
-- `queue(const queue &que);`            //拷贝构造函数
+- `queue<T> que;` //queue采用模板类实现，queue对象的默认构造形式
+- `queue(const queue &que);` //拷贝构造函数
 
 赋值操作：
 
-- `queue& operator=(const queue &que);`           //重载等号操作符
+- `queue& operator=(const queue &que);` //重载等号操作符
 
 数据存取：
 
-- `push(elem);`                             //往队尾添加元素
-- `pop();`                                      //从队头移除第一个元素
-- `back();`                                    //返回最后一个元素
-- `front(); `                                  //返回第一个元素
+- `push(elem);` //往队尾添加元素
+- `pop();` //从队头移除第一个元素
+- `back();` //返回最后一个元素
+- `front(); ` //返回第一个元素
 
 大小操作：
 
-- `empty();`            //判断堆栈是否为空
-- `size(); `              //返回栈的大小
+- `empty();` //判断堆栈是否为空
+- `size(); ` //返回栈的大小
 
 **示例：**
 
@@ -10251,7 +10257,6 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
@@ -10269,7 +10274,7 @@ int main() {
 
 #### 3.7.1 list基本概念
 
-**功能：**将数据进行链式存储
+**功能：** 将数据进行链式存储
 
 **链表**（list）是一种物理存储单元上非连续的存储结构，数据元素的逻辑顺序是通过链表中的指针链接实现的
 
@@ -10279,7 +10284,9 @@ int main() {
 
 STL中的链表是一个双向循环链表
 
-由于链表的存储方式并不是连续的内存空间，因此链表list中的迭代器只支持前移和后移，属于**双向迭代器**
+![list 双向循环链表结构](../../Assets/cpp-syntax/list-doubly-circular-structure-academic.svg)
+
+由于链表的存储方式并不是连续的内存空间，因此链表list中的迭代器只支持前移和后移，**不支持跳跃**，属于**双向迭代器**
 
 list的优点：
 
@@ -10290,11 +10297,11 @@ list的缺点：
 
 * 链表灵活，但是空间(指针域) 和 时间（遍历）额外耗费较大
 
-List有一个重要的性质，插入操作和删除操作都不会造成原有list迭代器的失效，这在vector是不成立的。
+list有一个重要的性质，插入操作和删除操作都不会造成原有list迭代器的失效，这在vector是不成立的。
 
-总结：STL中**List和vector是两个最常被使用的容器**，各有优缺点
+总结：STL中**list和vector是两个最常被使用的容器**，各有优缺点
 
-#### 3.7.2  list构造函数
+#### 3.7.2 list构造函数
 
 **功能描述：**
 
@@ -10302,17 +10309,17 @@ List有一个重要的性质，插入操作和删除操作都不会造成原有l
 
 **函数原型：**
 
-* `list<T> lst;`                               //list采用采用模板类实现,对象的默认构造形式：
-* `list(beg,end);`                           //构造函数将[beg, end)区间中的元素拷贝给本身。
-* `list(n,elem);`                             //构造函数将n个elem拷贝给本身。
-* `list(const list &lst);`            //拷贝构造函数。
+* `list<T> lst;` //list采用采用模板类实现,对象的默认构造形式：
+* `list(beg,end);` //构造函数将\[beg, end)区间中的元素拷贝给本身。
+* `list(n,elem);` //构造函数将n个elem拷贝给本身。
+* `list(const list &lst);` //拷贝构造函数。
 
 **示例：**
 
 ```C++
 #include <list>
 
-void printList(const list<int>& L) {
+void printList(const list<int>& L) { //防止修改可以加一个const
 
 	for (list<int>::const_iterator it = L.begin(); it != L.end(); it++) {
 		cout << *it << " ";
@@ -10344,7 +10351,6 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
@@ -10359,10 +10365,10 @@ int main() {
 
 **函数原型：**
 
-* `assign(beg, end);`            //将[beg, end)区间中的数据拷贝赋值给本身。
-* `assign(n, elem);`              //将n个elem拷贝赋值给本身。
-* `list& operator=(const list &lst);`         //重载等号操作符
-* `swap(lst);`                         //将lst与本身的元素互换。
+* `assign(beg, end);` //将\[beg, end)区间中的数据拷贝赋值给本身。
+* `assign(n, elem);` //将n个elem拷贝赋值给本身。
+* `list& operator=(const list &lst);` //重载等号操作符
+* `swap(lst);` //将lst与本身的元素互换。
 
 **示例：**
 
@@ -10435,7 +10441,6 @@ int main() {
 
 	test02();
 
-
 	return 0;
 }
 ```
@@ -10448,19 +10453,16 @@ int main() {
 
 * 对list容器的大小进行操作
 
-**函数原型：**
+**常用成员函数：**
 
-* `size(); `                             //返回容器中元素的个数
-
-* `empty(); `                           //判断容器是否为空
-
-* `resize(num);`                   //重新指定容器的长度为num，若容器变长，则以默认值填充新位置。
-
-  					    //如果容器变短，则末尾超出容器长度的元素被删除。
-
-* `resize(num, elem); `       //重新指定容器的长度为num，若容器变长，则以elem值填充新位置。
-
-   			 	 						    //如果容器变短，则末尾超出容器长度的元素被删除。
+* `lst.size()`：返回容器中的元素个数
+* `lst.empty()`：判断容器是否为空
+* `lst.resize(num)`：将容器长度重新指定为 `num`
+  * 容器变长时，使用默认值填充新位置
+  * 容器变短时，删除末尾超出新长度的元素
+* `lst.resize(num, elem)`：将容器长度重新指定为 `num`
+  * 容器变长时，使用 `elem` 填充新位置
+  * 容器变短时，删除末尾超出新长度的元素
 
 **示例：**
 
@@ -10506,7 +10508,6 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
@@ -10531,9 +10532,9 @@ int main() {
 * pop_front();//从容器开头移除第一个元素
 * insert(pos,elem);//在pos位置插elem元素的拷贝，返回新数据的位置。
 * insert(pos,n,elem);//在pos位置插入n个elem数据，无返回值。
-* insert(pos,beg,end);//在pos位置插入[beg,end)区间的数据，无返回值。
+* insert(pos,beg,end);//在pos位置插入\[beg,end)区间的数据，无返回值。
 * clear();//移除容器的所有数据
-* erase(beg,end);//删除[beg,end)区间的数据，返回下一个数据的位置。
+* erase(beg,end);//删除\[beg,end)区间的数据，返回下一个数据的位置。
 * erase(pos);//删除pos位置的数据，返回下一个数据的位置。
 * remove(elem);//删除容器中所有与elem值匹配的元素。
 
@@ -10600,7 +10601,6 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
@@ -10627,6 +10627,8 @@ int main() {
 * `front();`        //返回第一个元素。
 * `back();`         //返回最后一个元素。
 
+因为链表不是连续空间，所以不支持使用[]和at的方式进行访问
+
 **示例：**
 
 ```C++
@@ -10641,7 +10643,6 @@ void test01()
 	L1.push_back(30);
 	L1.push_back(40);
 
-
 	//cout << L1.at(0) << endl;//错误 不支持at访问数据
 	//cout << L1[0] << endl; //错误  不支持[]方式访问数据
 	cout << "第一个元素为： " << L1.front() << endl;
@@ -10655,7 +10656,6 @@ void test01()
 int main() {
 
 	test01();
-
 
 	return 0;
 }
@@ -10676,8 +10676,8 @@ int main() {
 
 **函数原型：**
 
-* `reverse();`   //反转链表
-* `sort();`        //链表排序
+* `reverse();` //反转链表
+* `sort();` //链表排序(成员函数版)
 
 **示例：**
 
@@ -10703,24 +10703,26 @@ void test01()
 	L.push_back(30);
 	L.push_back(20);
 	L.push_back(70);
-	printList(L);
+	printList(L); //90 30 20 70 
 
 	//反转容器的元素
 	L.reverse();
-	printList(L);
+	printList(L); //70 20 30 90
 
 	//排序
+	
+	//不可以使用sort(L.begin(),L.end()),因为所有不支持随机访问迭代器的容器，都不可以使用标准算法，但是，这些不支持随即访问迭代器的容器，内部会提供一些对应的算法，所以有L.sort()，但这不是全局函数，而是内部的成员函数
+	
 	L.sort(); //默认的排序规则 从小到大
-	printList(L);
+	printList(L); //20 30 70 90
 
 	L.sort(myCompare); //指定规则，从大到小
-	printList(L);
+	printList(L); //90 70 30 20
 }
 
 int main() {
 
 	test01();
-
 
 	return 0;
 }
@@ -10805,7 +10807,6 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
@@ -10833,18 +10834,20 @@ int main() {
 * set不允许容器中有重复的元素
 * multiset允许容器中有重复的元素
 
+两者需要的头文件都是`#include <set>`
+
 #### 3.8.2 set构造和赋值
 
 功能描述：创建set容器以及赋值
 
 构造：
 
-* `set<T> st;`                        //默认构造函数：
-* `set(const set &st);`       //拷贝构造函数
+* `set<T> st;` //默认构造函数：
+* `set(const set &st);` //拷贝构造函数
 
 赋值：
 
-* `set& operator=(const set &st);`    //重载等号操作符
+* `set& operator=(const set &st);` //重载等号操作符
 
 **示例：**
 
@@ -10865,11 +10868,12 @@ void test01()
 {
 	set<int> s1;
 
+	s1.insert(20);
 	s1.insert(10);
 	s1.insert(30);
 	s1.insert(20);
 	s1.insert(40);
-	printSet(s1);
+	printSet(s1); //10,20,30,40
 
 	//拷贝构造
 	set<int>s2(s1);
@@ -10885,15 +10889,14 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
 
 总结：
 
-* set容器插入数据时用insert
-* set容器插入数据的数据会自动排序
+* set容器插入数据时只能用insert，没有pop_front这种
+* set容器插入数据的数据会自动排序，且不允许重复，重复输入相当于没输入（改成multiset会允许）
 
 #### 3.8.3 set大小和交换
 
@@ -10903,9 +10906,9 @@ int main() {
 
 **函数原型：**
 
-* `size();`          //返回容器中元素的数目
-* `empty();`        //判断容器是否为空
-* `swap(st);`      //交换两个集合容器
+* `size();` //返回容器中元素的数目
+* `empty();` //判断容器是否为空
+* `swap(st);` //交换两个集合容器
 
 **示例：**
 
@@ -10978,7 +10981,6 @@ int main() {
 
 	test02();
 
-
 	return 0;
 }
 ```
@@ -10997,11 +10999,11 @@ int main() {
 
 **函数原型：**
 
-* `insert(elem);`           //在容器中插入元素。
-* `clear();`                    //清除所有元素
-* `erase(pos);`              //删除pos迭代器所指的元素，返回下一个元素的迭代器。
-* `erase(beg, end);`    //删除区间[beg,end)的所有元素 ，返回下一个元素的迭代器。
-* `erase(elem);`            //删除容器中值为elem的元素。
+* `insert(elem);` //在容器中插入元素。
+* `clear();` //清除所有元素
+* `erase(pos);` //删除**pos迭代器**所指的元素，返回下一个元素的迭代器。
+* `erase(beg, end);` //删除区间\[beg,end)的所有元素 ，返回下一个元素的迭代器。
+* `erase(elem);` //删除容器中值为elem的元素。
 
 **示例：**
 
@@ -11045,7 +11047,6 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
@@ -11064,8 +11065,8 @@ int main() {
 
 **函数原型：**
 
-* `find(key);`                  //查找key是否存在,若存在，返回该键的元素的迭代器；若不存在，返回set.end();
-* `count(key);`                //统计key的元素个数
+* `find(key);` //查找key是否存在。若存在，返回该键的元素的**迭代器**；若不存在，返回set.end()
+* `count(key);` //统计key的元素个数。对于set容器而言，不是0就是1；对于multiset而言可能不止1
 
 **示例：**
 
@@ -11102,7 +11103,6 @@ void test01()
 int main() {
 
 	test01();
-
 
 	return 0;
 }
