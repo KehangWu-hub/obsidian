@@ -12307,7 +12307,7 @@ int main() {
 
   // end 结束迭代器
 
-  // _func 函数或者函数对象
+  // \_func 函数或者函数对象
 
 **示例：**
 
@@ -12493,7 +12493,7 @@ public:
 		this->m_Name = name;
 		this->m_Age = age;
 	}
-	//重载==
+	//重载==，让底层的find知道如何对比person类型
 	bool operator==(const Person& p)
 	{
 		if (this->m_Name == p.m_Name && this->m_Age == p.m_Age)
