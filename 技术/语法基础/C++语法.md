@@ -2880,6 +2880,12 @@ int main() {
 }
 ```
 
+`srand((unsigned int)time(NULL));` 用当前时间作为随机数种子，使程序每次运行时 `rand()` 产生的随机数序列尽量不同。
+
+- `time(NULL)`：获取当前时间
+- `(unsigned int)`：将时间值转换为 `srand()` 需要的无符号整数
+- `srand()` 设置**随机种子**的函数，例如`srand(10);`
+
 #### 8.8.2 案例2
 
 **案例描述：**
@@ -12553,7 +12559,7 @@ void test02() {
 
   // end 结束迭代器
 
-  // _Pred 函数或者谓词（返回bool类型的仿函数）
+  // \_Pred 函数或者谓词（返回bool类型的仿函数）
 
 **示例：**
 
@@ -12643,7 +12649,6 @@ int main() {
 
 	test02();
 
-
 	return 0;
 }
 ```
@@ -12706,7 +12711,7 @@ void test01()
 
 - `bool binary_search(iterator beg, iterator end, value);  `
 
-  // 查找指定的元素，查到 返回true  否则false
+  // 查找指定的元素，查到返回true，否则false，以前都是返回迭代器
 
   // 注意: 在**无序序列中不可用**
 
@@ -12746,12 +12751,11 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
 
-**总结：**二分查找法查找效率很高，值得注意的是查找的容器中元素必须的有序序列
+**总结：** 二分查找法查找效率很高，值得注意的是查找的容器中元素必须的有序序列，如果是无序序列，可能会出错
 
 #### 5.2.5 count
 
@@ -12845,7 +12849,6 @@ int main() {
 
 	test02();
 
-
 	return 0;
 }
 ```
@@ -12868,7 +12871,7 @@ int main() {
 
   // end 结束迭代器
 
-  // _Pred 谓词
+  // \_Pred 谓词
 
 **示例：**
 
@@ -12951,12 +12954,11 @@ int main() {
 
 	test02();
 
-
 	return 0;
 }
 ```
 
-**总结：**按值统计用count，按条件统计用count_if
+**总结：** 按值统计用count，按条件统计用count_if
 
 ### 5.3 常用排序算法
 
@@ -12966,10 +12968,10 @@ int main() {
 
 **算法简介：**
 
-- `sort`             //对容器内元素进行排序
-- `random_shuffle`   //洗牌   指定范围内的元素随机调整次序
-- `merge `           // 容器元素合并，并存储到另一容器中
-- `reverse`       // 反转指定范围的元素
+- `sort` //对容器内元素进行排序
+- `random_shuffle` //洗牌,指定范围内的元素随机调整次序
+- `merge ` // 容器元素合并，并存储到另一容器中
+- `reverse` // 反转指定范围的元素
 
 #### 5.3.1 sort
 
@@ -12987,7 +12989,7 @@ int main() {
 
   //  end    结束迭代器
 
-  // _Pred  谓词
+  // \_Pred  谓词
 
 **示例：**
 
@@ -13023,12 +13025,11 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
 
-**总结：**sort属于开发中最常用的算法之一，需熟练掌握
+**总结：** sort属于开发中最常用的算法之一，需熟练掌握
 
 #### 5.3.2 random_shuffle
 
@@ -13083,12 +13084,11 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
 
-**总结：**random_shuffle洗牌算法比较实用，使用时记得加随机数种子
+**总结：** random_shuffle洗牌算法比较实用，使用时记得加随机数种子
 
 #### 5.3.3 merge
 
@@ -13104,11 +13104,11 @@ int main() {
 
   // 注意: 两个容器必须是**有序的**
 
-  // beg1   容器1开始迭代器
-  // end1   容器1结束迭代器
-  // beg2   容器2开始迭代器
-  // end2   容器2结束迭代器
-  // dest    目标容器开始迭代器
+  // beg1 容器1开始迭代器
+  // end1 容器1结束迭代器
+  // beg2 容器2开始迭代器
+  // end2 容器2结束迭代器
+  // dest 目标容器开始迭代器
 
 **示例：**
 
@@ -13138,7 +13138,7 @@ void test01()
 	vector<int> vtarget;
 	//目标容器需要提前开辟空间
 	vtarget.resize(v1.size() + v2.size());
-	//合并  需要两个有序序列
+	//合并 需要两个有序序列
 	merge(v1.begin(), v1.end(), v2.begin(), v2.end(), vtarget.begin());
 	for_each(vtarget.begin(), vtarget.end(), myPrint());
 	cout << endl;
@@ -13148,12 +13148,11 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
 
-**总结：**merge合并的两个容器必须的有序序列
+**总结：** merge合并的两个容器必须的有序序列，且目标容器需要提前开辟空间，不然把两个有数据的容器生往一个空容器塞肯定出错
 
 #### 5.3.4 reverse
 
@@ -13210,12 +13209,11 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
 
-**总结：**reverse反转区间内元素，面试题可能涉及到
+**总结：** reverse反转区间内元素，实际不常用但是面试题可能涉及到
 
 ### 5.4 常用拷贝和替换算法
 
@@ -13225,10 +13223,10 @@ int main() {
 
 **算法简介：**
 
-- `copy`                      // 容器内指定范围的元素拷贝到另一容器中
-- `replace`                // 将容器内指定范围的旧元素修改为新元素
-- `replace_if `          // 容器内指定范围满足条件的元素替换为新元素
-- `swap`                     // 互换两个容器的元素
+- `copy` // 容器内指定范围的元素拷贝到另一容器中
+- `replace` // 将容器内指定范围的旧元素修改为新元素
+- `replace_if ` // 容器内指定范围满足条件的元素替换为新元素
+- `swap` // 互换两个容器的元素
 
 #### 5.4.1 copy
 
@@ -13271,7 +13269,7 @@ void test01()
 	}
 	vector<int> v2;
 	v2.resize(v1.size());
-	copy(v1.begin(), v1.end(), v2.begin());
+	copy(v1.begin(), v1.end(), v2.begin()); //也可以用重载等于号，这里只是演示copy用法
 
 	for_each(v2.begin(), v2.end(), myPrint());
 	cout << endl;
@@ -13281,12 +13279,11 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
 
-**总结：**利用copy算法在拷贝时，目标容器记得提前开辟空间
+**总结：** 利用copy算法在拷贝时，目标容器记得提前开辟空间
 
 #### 5.4.2 replace
 
@@ -13349,12 +13346,11 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
 
-**总结：**replace会替换区间内满足条件的元素
+**总结：** replace会替换区间内满足条件的元素
 
 #### 5.4.3 replace_if
 
@@ -13372,7 +13368,7 @@ int main() {
 
   // end 结束迭代器
 
-  // _pred 谓词
+  // \_pred 谓词
 
   // newvalue 替换的新元素
 
@@ -13427,12 +13423,11 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
 
-**总结：**replace_if按条件查找，可以利用仿函数灵活筛选满足的条件
+**总结：** replace_if按条件查找，可以利用仿函数灵活筛选满足的条件
 
 #### 5.4.4 swap
 
@@ -13492,12 +13487,13 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
 
 **总结：** swap交换容器时，注意交换的容器要同种类型
+
+`swap` 不是把元素一个个搬过去，而是直接交换两个 vector 管理的内存资源,所以交换的容器大小不必相等
 
 ### 5.5 常用算术生成算法
 
@@ -13511,9 +13507,9 @@ int main() {
 
 **算法简介：**
 
-- `accumulate`      // 计算容器元素累计总和
+- `accumulate` // 计算容器元素累计总和
 
-- `fill`                 // 向容器中添加元素
+- `fill` // 向容器中添加元素
 
 #### 5.5.1 accumulate
 
@@ -13553,13 +13549,12 @@ void test01()
 int main() {
 
 	test01();
-
-
+ 
 	return 0;
 }
 ```
 
-**总结：**accumulate使用时头文件注意是 numeric，这个算法很实用
+**总结：** accumulate使用时头文件注意是 numeric，这个算法很实用
 
 #### 5.5.2 fill
 
@@ -13611,12 +13606,11 @@ int main() {
 
 	test01();
 
-
 	return 0;
 }
 ```
 
-**总结：**利用fill可以将容器区间内元素填充为 指定的值
+**总结：** 利用fill可以将容器区间内元素填充为指定的值
 
 ### 5.6 常用集合算法
 
@@ -13626,11 +13620,11 @@ int main() {
 
 **算法简介：**
 
-- `set_intersection`          // 求两个容器的交集
+- `set_intersection` // 求两个容器的交集
 
-- `set_union`                       // 求两个容器的并集
+- `set_union` // 求两个容器的并集
 
-- `set_difference `              // 求两个容器的差集
+- `set_difference ` // 求两个容器的差集
 
 #### 5.6.1 set_intersection
 
@@ -13692,7 +13686,6 @@ void test01()
 int main() {
 
 	test01();
-
 
 	return 0;
 }
@@ -13763,7 +13756,6 @@ void test01()
 int main() {
 
 	test01();
-
 
 	return 0;
 }
@@ -13840,7 +13832,6 @@ void test01()
 int main() {
 
 	test01();
-
 
 	return 0;
 }
