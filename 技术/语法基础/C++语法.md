@@ -10831,6 +10831,8 @@ int main() {
 
 * 所有元素都会在插入时自动被排序
 
+相当于是python里的集合+会排序，如果是unordered_set就相当于普通集合
+
 **本质：**
 
 * set/multiset属于**关联式容器**，底层结构是用**二叉树**实现。
@@ -11346,9 +11348,11 @@ int main() {
 **简介：**
 
 * map中所有元素都是pair
-* pair中第一个元素为key（键值），起到索引作用，第二个元素为value（实值），相当于是python里的字典dict
+* pair中第一个元素为key（键值），起到索引作用，第二个元素为value（实值）
 * 所有元素都会根据元素的键值自动排序
- 
+
+相当于是**python里的字典dict**+会排序，如果是`unordered_map`就相当于普通字典
+
 **本质：**
 
 * map/multimap属于**关联式容器**，底层结构是用二叉树实现。
@@ -13842,3 +13846,82 @@ int main() {
 - 求差集的两个集合必须的有序序列
 - 目标容器开辟空间需要从**两个容器取较大值**
 - set_difference返回值既是差集中最后一个元素的位置
+
+# 补充
+
+## auto
+
+`auto` 让编译器根据初始化表达式推导变量类型。它适合类型名称较长或类型已经很明确的场景，例如迭代器和范围 `for` 循环。
+
+`auto` 只是在编译阶段推导类型，不会让变量变成动态类型。类型一旦确定，之后就不能改变。
+
+### 基本用法
+
+```cpp
+auto count = 10;       // int
+auto price = 3.14;     // double
+auto name = "Tom";    // const char*
+```
+
+使用 `auto` 声明变量时必须提供初始值，否则编译器无法推导类型。
+
+```cpp
+auto value; // 错误：缺少初始化表达式
+```
+
+### 简化复杂类型
+
+`auto` 常用于省略迭代器等较长的类型名称。
+
+```cpp
+vector<int> values = {1, 2, 3};
+
+auto it = values.begin();
+auto end = set_difference(
+    v1.begin(), v1.end(),
+    v2.begin(), v2.end(),
+    vTarget.begin()
+);
+```
+
+上面的 `it` 和 `end` 都由函数返回值推导为对应的迭代器类型。
+
+### 在范围 for 循环中使用
+
+```cpp
+for (auto value : values) {
+    cout << value << " ";
+}
+
+for (auto& value : values) {
+    value *= 2;
+}
+
+for (const auto& value : values) {
+    cout << value << " ";
+}
+```
+
+- `auto value`：复制元素，修改 `value` 不影响原容器。
+- `auto& value`：引用元素，可以修改原容器。
+- `const auto& value`：引用元素但不允许修改，也不会产生复制，适合只读遍历。
+
+### const 和引用
+
+按值推导时，`auto` 会忽略原变量的顶层 `const` 和引用属性。
+
+```cpp
+const int number = 10;
+
+auto value = number;             // int
+const auto constValue = number;  // const int
+const auto& ref = number;        // const int&
+```
+
+需要保留引用或只读限制时，应明确写出 `auto&` 或 `const auto&`。
+
+### 使用建议
+
+- 类型名称较长，但通过右侧表达式可以看出实际类型时，使用 `auto`。
+- 只读遍历对象时，优先使用 `const auto&`，避免复制。
+- 类型会影响代码含义且不容易看出时，直接写明类型。
