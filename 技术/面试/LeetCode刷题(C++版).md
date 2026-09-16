@@ -88,67 +88,205 @@ C++ 刷题中常用两种哈希容器：
 
 ## 2. 常用方法
 
-### `find()`：判断键是否存在
+先区分两种容器：需要保存“键和值”时使用 `unordered_map`，只需要去重或判断元素是否存在时使用 `unordered_set`。普通的 `map` 和 `set` 也能完成这些操作，但它们的查找、插入和删除复杂度为 $O(\log n)$；`unordered_map` 和 `unordered_set` 的平均复杂度为 $O(1)$，通常更快。因此，不要求元素有序时，刷题中一般优先使用 `unordered_map` 和 `unordered_set`。
+
+### 创建哈希表
+
+`unordered_map<键类型, 值类型>` 用来建立键和值之间的映射：
+
+```cpp
+unordered_map<int, int> index;             // 数字 -> 下标
+unordered_map<string, int> count;          // 字符串 -> 出现次数
+unordered_map<string, vector<string>> groups; // 特征 -> 一组字符串
+```
+
+`unordered_set<元素类型>` 只保存不重复的元素：
+
+```cpp
+unordered_set<int> seen;
+
+// 使用 nums 中的所有元素初始化，并自动去重
+unordered_set<int> numbers(nums.begin(), nums.end());
+```
+
+### 插入或修改元素
+
+#### `unordered_map` 的 `[]`
+
+```cpp
+unordered_map<string, int> count;
+
+count["apple"] = 2; // 插入或修改
+count["apple"]++;   // 将值从 2 改为 3
+```
+
+如果键不存在，`mp[key]` 会先创建这个键，并给它一个默认值：
+
+| 值类型 | 默认值 |
+| :--- | :--- |
+| `int` | `0` |
+| `string` | 空字符串 |
+| `vector<T>` | 空数组 |
+
+因此，可以直接用 `[]` 完成计数和分组：
+
+```cpp
+count[word]++;
+groups[key].push_back(word);
+```
+
+C++ 不需要使用 Python 的 `defaultdict`，因为 `[]` 已经能在键不存在时创建默认值。
+
+但要注意，`[]` 不只是查询，它可能会修改哈希表：
+
+```cpp
+unordered_map<string, int> mp;
+int value = mp["missing"];
+
+// 此时 mp 中已经多了 {"missing", 0}
+```
+
+所以，**插入、修改、计数或分组时使用 `[]`；只想判断键是否存在时使用 `find()`**。
+
+#### `unordered_set` 的 `insert()`
+
+```cpp
+unordered_set<int> seen;
+
+seen.insert(3);
+seen.insert(5);
+seen.insert(3); // 3 已经存在，不会重复保存
+```
+
+### 使用 `find()` 查找元素
+
+`find(key)` 用于查找键，并返回一个迭代器。迭代器可以理解为指向容器中某个元素的位置。
 
 ```cpp
 unordered_map<int, int> mp;
 mp[3] = 7;
 
-if (mp.find(3) != mp.end()) {
-    // 键 3 存在
-}
+auto it = mp.find(3);
 ```
 
-`find(key)` 返回迭代器；找不到时返回 `end()`。这是兼容性最好的存在性判断方式。
-
-### `operator[]`：读取或写入值
+这里的 `auto` 表示让编译器根据右侧结果自动推断类型。上面的 `it` 实际类型是：
 
 ```cpp
-unordered_map<string, int> count;
-
-count["apple"] = 2;
-count["apple"]++;
+unordered_map<int, int>::iterator
 ```
 
-`mp[key]` 在键不存在时会先插入一个默认值：
+由于迭代器类型较长，通常直接使用 `auto`。
 
-- 数值默认是 `0`。
-- `string` 默认是空字符串。
-- `vector<T>` 默认是空数组。
+`find()` 有两种结果：
 
-因此，`mp[key]++` 很适合计数，`groups[key].push_back(value)` 很适合分组。
+- 找到键：返回指向该元素的迭代器。
+- 没找到键：返回 `mp.end()`。
 
-```cpp
-unordered_map<char, vector<string>> groups;
-groups['a'].push_back("apple");
-```
-
-但如果只是想检查键是否存在，不要直接写 `mp[key]`，否则查询动作会修改哈希表：
+因此，完整的判断方式是：
 
 ```cpp
-unordered_map<string, int> mp;
-int value = mp["missing"]; // 插入 {"missing", 0}
-```
-
-纯查询应使用 `find()`；确定键存在时，也可以使用 `at()` 读取。`at()` 不会自动插入，但键不存在时会抛出异常。
-
-### `find()` 返回的迭代器
-
-```cpp
-auto it = mp.find(key);
+auto it = mp.find(3);
 
 if (it != mp.end()) {
-    auto storedKey = it->first;
-    auto storedValue = it->second;
+    // 找到了
+} else {
+    // 没找到
 }
 ```
 
-- `it->first` 是键。
-- `it->second` 是值。
+对于 `unordered_map`，迭代器指向的是一组键值对：
 
-已经拿到迭代器时，直接使用 `it->second`，不必再用 `mp[key]` 查一次。
+```cpp
+if (it != mp.end()) {
+    int key = it->first;    // 键：3
+    int value = it->second; // 值：7
+}
+```
 
-### 计数与分组
+已经通过 `find()` 得到迭代器后，直接使用 `it->second` 读取值，不需要再写一次 `mp[key]`。
+
+`unordered_set` 的查找方式相同：
+
+```cpp
+unordered_set<int> seen = {1, 3, 5};
+
+if (seen.find(3) != seen.end()) {
+    // 3 存在
+}
+```
+
+> `end()` 不指向实际元素，它只表示容器末尾之后的位置。在这里主要作为“没有找到”的标记。
+
+### 使用 `at()` 读取值
+
+确定键存在时，可以使用 `at()` 读取值：
+
+```cpp
+int value = mp.at(3);
+```
+
+`at()` 与 `[]` 的区别是：
+
+- `mp[key]`：键不存在时自动插入默认值。
+- `mp.at(key)`：键不存在时抛出异常，不会插入新元素。
+
+刷题时通常使用 `find()` 完成“查找并读取”，使用 `[]` 完成“插入或修改”，因此 `at()` 用得相对较少。
+
+### 删除元素
+
+`erase(key)` 用于根据键删除元素：
+
+```cpp
+mp.erase(3);
+seen.erase(5);
+```
+
+如果元素不存在，`erase(key)` 不会报错。
+
+`clear()` 用于删除容器中的全部元素：
+
+```cpp
+mp.clear();
+seen.clear();
+```
+
+### 遍历哈希表
+
+C++17 可以使用结构化绑定同时取出键和值：
+
+```cpp
+for (const auto& [key, value] : mp) {
+    // key 是键，value 是值
+}
+```
+
+其中：
+
+- `auto`：让编译器自动推断类型。
+- `&`：使用引用，避免复制键值对。
+- `const`：只读取，不允许在循环中修改。
+
+如果需要修改值，去掉 `const`：
+
+```cpp
+for (auto& [key, value] : mp) {
+    value++;
+}
+```
+
+`unordered_set` 中没有键值对，直接遍历元素：
+
+```cpp
+for (int num : seen) {
+    // num 是集合中的元素
+}
+```
+
+哈希容器不保证遍历顺序，不能依赖输出元素的先后顺序。
+
+### 常见使用方式
+
+#### 统计出现次数
 
 ```cpp
 unordered_map<int, int> count;
@@ -157,6 +295,8 @@ for (int num : nums) {
     count[num]++;
 }
 ```
+
+#### 按特征分组
 
 ```cpp
 unordered_map<string, vector<string>> groups;
@@ -168,71 +308,28 @@ for (const string& word : words) {
 }
 ```
 
-`operator[]` 会自动创建默认值，因此 C++ 不需要 Python 的 `defaultdict`。
+`sort()` 会直接修改字符串，所以先把 `word` 复制给 `key`，再对 `key` 排序。字母异位词排序后得到相同的键，因此会进入同一组。
 
-### 遍历 `unordered_map`
+#### 去重并快速判断是否存在
 
 ```cpp
-for (const auto& [key, value] : mp) {
-    // C++17 结构化绑定
+unordered_set<int> numbers(nums.begin(), nums.end());
+
+if (numbers.find(target) != numbers.end()) {
+    // target 存在
 }
 ```
 
-如果只需要值：
+### `reserve()`：可选的性能优化
 
-```cpp
-vector<vector<string>> answer;
-
-for (auto& [key, group] : groups) {
-    answer.push_back(move(group));
-}
-```
-
-`move(group)` 可以把分组内容移动到答案中，避免复制。移动后不要再依赖 `group` 原来的内容。如果暂时不熟悉移动语义，写 `answer.push_back(group)` 也完全正确。
-
-### `unordered_set`：存在性判断与去重
-
-```cpp
-unordered_set<int> seen(nums.begin(), nums.end());
-
-seen.insert(4);
-seen.erase(2);
-
-if (seen.find(3) != seen.end()) {
-    // 3 存在
-}
-```
-
-集合只保存元素，不保存额外信息。如果只需要去重或判断某个值是否存在，优先使用 `unordered_set`。
-
-### `sort()`：生成统一的字符串键
-
-```cpp
-string key = "tea";
-sort(key.begin(), key.end());
-// key == "aet"
-```
-
-`sort()` 会直接修改原对象。因此分组异位词时，应先复制一份字符串作为键，保留原单词用于答案。
-
-### `reserve()`：提前预留空间
-
-已知大致元素数量时，可以提前预留桶空间，减少扩容和重新哈希：
+如果大致知道要存多少个元素，可以提前预留空间，减少扩容次数：
 
 ```cpp
 unordered_map<int, int> mp;
 mp.reserve(nums.size());
 ```
 
-这通常只是性能优化，不改变算法复杂度，也不是每道题都必须写。
-
-### `max()`：维护最优答案
-
-```cpp
-longest = max(longest, currentLength);
-```
-
-`max(a, b)` 返回两者中的较大值，两个参数通常应具有相同类型。
+`reserve()` 不改变算法逻辑，也不是必须使用。刚开始刷题时，可以先不写。
 
 ## 3. 题目
 
