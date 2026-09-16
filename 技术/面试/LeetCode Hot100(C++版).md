@@ -431,20 +431,18 @@ public:
 class Solution {
 public:
     vector<vector<string>> groupAnagrams(vector<string>& strs) {
-        unordered_map<string, vector<string>> groups;
-        groups.reserve(strs.size());
+        unordered_map<string, vector<string>> mp;
 
-        for (const string& word : strs) {
-            string key = word;
-            sort(key.begin(), key.end());
-            groups[key].push_back(word);
+        for (string& str : strs) { //这个和迭代器写法是一样的
+            string key = str;
+            sort(key.begin(), key.end()); //注意不要写成sort(key)，曾经出错过
+            mp[key].push_back(str);
         }
 
         vector<vector<string>> answer;
-        answer.reserve(groups.size());
 
-        for (auto& [key, group] : groups) {
-            answer.push_back(move(group));
+        for (auto it = mp.begin(); it != mp.end(); it++) {
+            answer.push_back(it->second);
         }
 
         return answer;
@@ -454,12 +452,11 @@ public:
 
 ==解析==
 
-- **统一特征**：字母异位词排序后会得到相同字符串，例如 `"eat"` 和 `"tea"` 都得到 `"aet"`。
-- **为什么复制 `word`**：`sort()` 会原地修改字符串。复制为 `key` 后排序，才能保留原单词放入答案。
-- **为什么可以直接 `groups[key].push_back(word)`**：键不存在时，`groups[key]` 会自动创建一个空的 `vector<string>`。
-- 设字符串数量为 $n$，单个字符串的最大长度为 $k$，时间复杂度为 $O(nk\log k)$，额外空间复杂度为 $O(nk)$。
-
-> 如果使用 26 个字母的频次数组作为键，可以把生成特征的时间降为 $O(k)$，但需要把频次编码成字符串或为 `array<int, 26>` 自定义哈希。当前写法更直接，也足以通过本题。
+- **生成分组键**：遍历 `strs` 时，`str` 表示当前单词。将它复制到 `key` 并排序，字母异位词会得到相同的 `key`；例如 `"eat"` 和 `"tea"` 的 `key` 都是 `"aet"`。
+- **为什么不直接排序 `str`**：`sort()` 会原地修改字符串。对 `key` 排序可以保留 `str` 的原始内容，便于将原单词存入结果。
+- **按键分组**：`mp` 保存“排序后的字符串 → 原单词列表”。执行 `mp[key].push_back(str)` 时，如果 `key` 不存在，`mp[key]` 会先自动创建一个空的 `vector<string>`。
+- **生成答案**：遍历 `mp` 时，`it->second` 就是某一组字母异位词，将它加入 `answer` 即可。`unordered_map` 不保证遍历顺序，但题目允许以任意顺序返回。
+- **复杂度**：设字符串数量为 $n$，单个字符串的最大长度为 $k$，时间复杂度为 $O(nk\log k)$，额外空间复杂度为 $O(nk)$。
 
 ---
 

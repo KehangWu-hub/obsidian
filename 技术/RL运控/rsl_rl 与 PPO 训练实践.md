@@ -102,3 +102,5 @@ python legged_gym/scripts/play.py --task=a1
 如果先导入 torch： PyTorch 机制极其霸道，它会瞬间接管并锁死显卡的 CUDA 内存池。随后当 Isaac Gym 试图建立物理引擎时，会发现底层通道被强占，导致内存指针错乱，直接引发“段错误”或“CUBLAS 未初始化”报错。
 
 如果先导入 isaacgym： Isaac Gym 会在显卡中安顿好渲染和计算通道，并将其设置为“允许共享”的开放状态。随后导入 PyTorch 时，它会检测到该状态并选择和平接入，实现两者完美共存。
+
+

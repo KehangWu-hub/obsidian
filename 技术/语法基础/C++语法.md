@@ -13771,7 +13771,7 @@ int main() {
 - 目标容器开辟空间需要**两个容器相加**
 - set_union返回值既是并集中最后一个元素的位置
 
-#### 5.6.3  set_difference
+#### 5.6.3 set_difference
 
 **功能描述：**
 
