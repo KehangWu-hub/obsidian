@@ -431,17 +431,17 @@ public:
 class Solution {
 public:
     vector<vector<string>> groupAnagrams(vector<string>& strs) {
-        unordered_map<string, vector<string>> mp;
+        unordered_map<string, vector<string>> hashtable;
 
         for (string& str : strs) { //这个和迭代器写法是一样的
             string key = str;
             sort(key.begin(), key.end()); //注意不要写成sort(key)，曾经出错过
-            mp[key].push_back(str);
+            hashtable[key].push_back(str);
         }
 
         vector<vector<string>> answer;
 
-        for (auto it = mp.begin(); it != mp.end(); it++) {
+        for (auto it = hashtable.begin(); it != hashtable.end(); it++) {
             answer.push_back(it->second);
         }
 
@@ -454,8 +454,8 @@ public:
 
 - **生成分组键**：遍历 `strs` 时，`str` 表示当前单词。将它复制到 `key` 并排序，字母异位词会得到相同的 `key`；例如 `"eat"` 和 `"tea"` 的 `key` 都是 `"aet"`。
 - **为什么不直接排序 `str`**：`sort()` 会原地修改字符串。对 `key` 排序可以保留 `str` 的原始内容，便于将原单词存入结果。
-- **按键分组**：`mp` 保存“排序后的字符串 → 原单词列表”。执行 `mp[key].push_back(str)` 时，如果 `key` 不存在，`mp[key]` 会先自动创建一个空的 `vector<string>`。
-- **生成答案**：遍历 `mp` 时，`it->second` 就是某一组字母异位词，将它加入 `answer` 即可。`unordered_map` 不保证遍历顺序，但题目允许以任意顺序返回。
+- **按键分组**：`hashtable` 保存“排序后的字符串 → 原单词列表”。执行 `hashtable[key].push_back(str)` 时，如果 `key` 不存在，`hashtable[key]` 会先自动创建一个空的 `vector<string>`。
+- **生成答案**：遍历 `hashtable` 时，`it->second` 就是某一组字母异位词，将它加入 `answer` 即可。`unordered_map` 不保证遍历顺序，但题目允许以任意顺序返回。
 - **复杂度**：设字符串数量为 $n$，单个字符串的最大长度为 $k$，时间复杂度为 $O(nk\log k)$，额外空间复杂度为 $O(nk)$。
 
 ---
@@ -468,40 +468,404 @@ public:
 
 - **示例**：输入 `nums = [100, 4, 200, 1, 3, 2]`，输出 `4`，因为最长连续序列是 `[1, 2, 3, 4]`。
 
-==答案（哈希集合 + 起点剪枝）==
+==错误答案==
+```cpp
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        int answer = 1;
+
+        sort(nums.begin(), nums.end());
+
+        int count = 1;
+
+        for (auto it = nums.begin(); it != nums.end(); it++) {
+            if (nums.find(*it + 1) != nums.end != nums.end()) {
+                count++;
+            } else {
+                answer = max(answer, count);
+                count = 1;
+            }
+        }
+
+        return answer;
+    }
+};
+```
+
+==错误解析==
+
+- **`vector` 没有 `find` 成员函数**：`nums.find(...)` 无法通过编译。若要在线性容器中查找，应使用 `<algorithm>` 中的 `std::find(nums.begin(), nums.end(), *it + 1)`；并加上头文件`<algorithm>`。
+- **没有考虑空数组**：`answer` 和 `count` 都初始化为 `1`，所以当 `nums` 为空时会返回 `1`，但正确结果应为 `0`。
+- **没有考虑重复元素**：例如 `[1, 2, 2, 3]` 中，两个 `2` 都会让 `count` 增加，可能错误地得到长度 `4`；最长连续序列的长度实际为 `3`。
+- **时间复杂度不符合要求**：排序本身需要 $O(n\log n)$；若再对每个元素调用一次 `std::find`，每次查找是 $O(n)$，整体会退化为 $O(n^2)$，不满足题目要求的 $O(n)$。
+
+
+==标准答案（哈希集合 + 起点剪枝）==
 
 ```cpp
 class Solution {
 public:
     int longestConsecutive(vector<int>& nums) {
-        unordered_set<int> numbers(nums.begin(), nums.end());
-        int longest = 0;
+        unordered_set<int> num_set;
 
-        for (int num : numbers) {
-            // num - 1 不存在，说明 num 是一段连续序列的起点
-            if (num == INT_MIN || numbers.find(num - 1) == numbers.end()) {
-                int current = num;
-                int length = 1;
+        for (int num : nums) {
+            num_set.insert(num); //map和set都没有push_back
+        }
 
-                while (current != INT_MAX &&
-                       numbers.find(current + 1) != numbers.end()) {
-                    ++current;
-                    ++length;
+        int answer = 0;
+
+        for (int num : num_set) {
+            // num 没有前驱，说明它是一段连续序列的起点
+            if (!num_set.count(num - 1)) {
+                int currentNum = num;
+                int currentStreak = 1;
+
+                while (num_set.count(currentNum + 1)) {
+                    currentNum += 1;
+                    currentStreak += 1;
                 }
 
-                longest = max(longest, length);
+                answer = max(answer, currentStreak);
             }
         }
 
-        return longest;
+        return answer;
     }
 };
 ```
 
 ==解析==
 
-- **为什么使用 `unordered_set`**：只需要判断数字是否存在，不需要保存下标或出现次数；集合还能自动去重。
-- **核心剪枝**：只有当 `num - 1` 不存在时，`num` 才是连续序列的起点，才从它开始向后查找。
-- **为什么不是 $O(n^2)$**：外层循环检查每个不同数字是否为起点；每段连续序列只会从起点完整扫描一次。所有 `while` 循环累计访问的数字数量不超过集合大小，因此平均时间复杂度是 $O(n)$。
-- **边界判断**：先处理 `INT_MIN` 和 `INT_MAX`，避免执行 `num - 1` 或 `current + 1` 时发生有符号整数溢出。
-- **空间复杂度**：$O(n)$。
+- **构造哈希集合**：先遍历 `nums`，将所有数字插入 `unordered_set`。哈希集合会自动去除重复元素，并且平均可以在 $O(1)$ 时间内判断一个数字是否存在。
+- **寻找序列起点**：遍历 `num_set`，通过 `num_set.count(num - 1)` 判断 `num` 的前一个数字是否存在。只有 `num - 1` 不存在时，`num` 才是一段连续序列的起点。例如在 `[1, 2, 3, 4]` 中，只会从 `1` 开始向后查找，而不会再从 `2`、`3` 或 `4` 重复查找。
+- **向后统计连续长度**：确定起点后，用 `currentNum` 记录当前数字，用 `currentStreak` 记录当前序列长度。只要集合中存在 `currentNum + 1`，就继续向后移动，并将长度加一。
+- **更新最长长度**：一段连续序列查找结束后，使用 `max(answer, currentStreak)` 更新目前找到的最长长度。`answer` 初始值为 `0`，因此输入为空数组时会直接返回 `0`。
+- **为什么整体是 $O(n)$**：虽然代码中有两层循环，但只有连续序列的起点会进入完整的 `while` 查找。每个不同的数字最多作为某段序列的一部分被访问一次，因此平均时间复杂度为 $O(n)$，而不是 $O(n^2)$。
+- **空间复杂度**：哈希集合最多保存 $n$ 个不同的数字，因此额外空间复杂度为 $O(n)$。
+- `set` / `unordered_set` 没有 `[]`
+- 
+```
+for (int num : num_set)
+```
+
+**不会执行 `num++`。**
+
+它的意思是：
+
+**依次从 `num_set` 里面取出一个元素，把这个元素赋值给 `num`。**
+
+例如：
+
+```
+unordered_set<int> num_set = {1, 2, 3, 4};
+```
+
+那么：
+
+```
+for (int num : num_set)
+```
+
+可以理解成：
+
+```
+num = 集合中的第一个元素;
+执行循环体;
+
+num = 集合中的第二个元素;
+执行循环体;
+
+num = 集合中的第三个元素;
+执行循环体;
+
+...
+```
+
+和 `num++` 是两回事
+
+# 双指针
+
+## 1. 概念
+
+双指针是指在遍历过程中同时维护两个位置，通过指针的移动缩小搜索范围，或完成原地修改。这里的“指针”通常是数组下标或迭代器，不一定是 C++ 中的指针类型。
+
+双指针常用于数组、字符串和链表，通常能把两层枚举的 $O(n^2)$ 时间复杂度降为 $O(n)$。能否使用双指针，关键在于移动某个指针后，能明确排除一部分不可能的答案。
+
+## 2. 常见类型
+
+### 左右指针
+
+两个指针分别从序列两端开始，根据当前状态向中间移动：
+
+```cpp
+int left = 0;
+int right = nums.size() - 1;
+
+while (left < right) {
+    if (/* 应移动左指针 */) {
+        left++;
+    } else {
+        right--;
+    }
+}
+```
+
+这种写法常用于有序数组查找、盛最多水的容器和接雨水等问题。
+
+### 快慢指针
+
+两个指针从同一方向出发：快指针负责遍历，慢指针记录下一个需要写入的位置。
+
+```cpp
+int slow = 0;
+
+for (int fast = 0; fast < nums.size(); fast++) {
+    if (/* 当前元素需要保留 */) {
+        nums[slow] = nums[fast];
+        slow++;
+    }
+}
+```
+
+这种写法常用于原地删除元素、移动零和有序数组去重。
+
+### 固定一个数，再使用左右指针
+
+处理三数之和时，可以先排序，再枚举第一个数，并在剩余区间中使用左右指针寻找另外两个数。这样可以将时间复杂度从 $O(n^3)$ 降为 $O(n^2)$。
+
+## 3. 题目
+
+### 题目 1：移动零（LeetCode 283，简单）
+
+==原题==
+
+给定一个数组 `nums`，将所有 `0` 移动到数组末尾，同时保持非零元素的相对顺序。要求原地修改数组，不能复制整个数组。
+
+- **示例**：输入 `nums = [0, 1, 0, 3, 12]`，修改后为 `[1, 3, 12, 0, 0]`。
+
+==错误答案==
+
+```cpp
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+        auto slow = nums.begin();
+
+        for (auto fast = nums.begin(); fast < nums.end(); ++fast) {
+            if (*slow) {
+                slow++;
+            } else {
+                int num = *slow;
+                *slow = *fast;
+                *fast = num;
+            }
+        }
+    }
+};
+```
+
+==问题原因==
+
+整体想法没有问题：`slow` 在当前位置不是 `0` 时向后移动，在遇到 `0` 时等待 `fast` 带来后面的元素；`fast` 则始终向后遍历。
+
+问题在于交换完成后，`slow` 所在位置已经变成了非零元素，但本轮没有立即移动 `slow`。下一轮循环需要先用一次 `if (*slow)` 才能让 `slow` 前进，而 `fast` 在这一轮仍会继续前进，因此两个指针之间会出现一轮不同步。
+
+例如输入 `[0, 1, 2, 0]`：
+
+- `fast` 找到 `1` 后，将它与第一个 `0` 交换，但 `slow` 仍停在原处。
+- 下一轮 `fast` 已经来到 `2`，这一轮却只执行了 `slow++`，没有处理当前的 `2`。
+- `fast` 继续走到数组末尾，已经没有机会再把 `2` 交换到前面。
+
+所以，本质上就是 `slow` 在交换后慢了一步。当 `fast` 走到后面时，剩余循环次数可能不足，最后一个需要前移的非零元素便来不及交换。
+
+==答案（快慢指针）==
+
+```cpp
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+        int n = nums.size();
+        int slow = 0;
+        int fast = 0;
+
+        while (fast < n) {
+            if (nums[fast]) {
+                swap(nums[slow], nums[fast]);
+                slow++;
+            }
+            fast++;
+        }
+    }
+};
+```
+
+==解析==
+
+- **快指针 `fast`**：遍历数组，寻找所有非零元素。
+- **慢指针 `slow`**：指向下一个非零元素应该放入的位置。
+- **交换元素**：当 `nums[fast]` 非零时，将它与 `nums[slow]` 交换，然后移动 `slow`。被换到后面的元素是 `0`，因此不需要再单独补零。
+- **保持相对顺序**：`fast` 从左到右依次处理非零元素，所以这些元素的相对顺序不会改变。
+- **复杂度**：时间复杂度为 $O(n)$，额外空间复杂度为 $O(1)$。
+
+---
+
+### 题目 2：盛最多水的容器（LeetCode 11，中等）
+
+==原题==
+
+给定一个整数数组 `height`，每个元素表示一条竖线的高度。选择两条线与横轴组成容器，求容器能够盛水的最大面积。
+
+两条线下标为 `left` 和 `right` 时，面积为：
+
+$$
+\min(height[left], height[right]) \times (right-left)
+$$
+
+==答案（左右指针）==
+
+```cpp
+class Solution {
+public:
+    int maxArea(vector<int>& height) {
+        int left = 0, right = height.size() - 1;
+        int ans = 0;
+
+        while (left < right) {
+            int area = min(height[left], height[right]) * (right - left);
+            ans = max(ans, area);
+
+            if (height[left] <= height[right]) {
+                ++left;
+            }
+            else {
+                --right;
+            }
+        }
+
+        return ans;
+    }
+};
+```
+
+==解析==
+
+- **初始位置**：左右指针放在数组两端，此时容器宽度最大。
+- **面积由短板决定**：容器高度是左右两条线中较短的一条。
+- **为什么移动短板**：移动指针后宽度一定减小。如果移动较高的一侧，较短的一侧不变，容器高度不会增加，因此面积不可能变大。只有移动较短的一侧，才可能找到更高的短板。
+- **复杂度**：两个指针最多各移动 $n$ 次，时间复杂度为 $O(n)$，额外空间复杂度为 $O(1)$。
+
+---
+
+### 题目 3：三数之和（LeetCode 15，中等）
+
+==原题==
+
+给定一个整数数组 `nums`，找出所有和为 `0` 且下标互不相同的三元组。答案中不能包含重复的三元组。
+
+- **示例**：输入 `nums = [-1, 0, 1, 2, -1, -4]`，输出 `[[-1, -1, 2], [-1, 0, 1]]`。
+
+==答案（排序 + 左右指针）==
+
+```cpp
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> answer;
+        sort(nums.begin(), nums.end());
+
+        for (int i = 0; i < nums.size(); i++) {
+            if (nums[i] > 0) {
+                break;
+            }
+
+            if (i > 0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+
+            int left = i + 1;
+            int right = nums.size() - 1;
+
+            while (left < right) {
+                int sum = nums[i] + nums[left] + nums[right];
+
+                if (sum < 0) {
+                    left++;
+                } else if (sum > 0) {
+                    right--;
+                } else {
+                    answer.push_back({nums[i], nums[left], nums[right]});
+                    left++;
+                    right--;
+
+                    while (left < right && nums[left] == nums[left - 1]) {
+                        left++;
+                    }
+
+                    while (left < right && nums[right] == nums[right + 1]) {
+                        right--;
+                    }
+                }
+            }
+        }
+
+        return answer;
+    }
+};
+```
+
+==解析==
+
+- **先排序**：排序后可以根据三数之和的大小决定移动方向，也便于跳过重复元素。
+- **固定第一个数**：枚举 `nums[i]`，再在 `i + 1` 到数组末尾之间寻找另外两个数。
+- **移动规则**：和小于 `0` 时，需要增大总和，因此移动 `left`；和大于 `0` 时，需要减小总和，因此移动 `right`。
+- **第一个数去重**：当 `nums[i] == nums[i - 1]` 时跳过当前元素，避免得到相同的三元组。
+- **另外两个数去重**：找到答案后先移动左右指针，再跳过与刚才相同的值。
+- **提前结束**：数组已经排序，如果 `nums[i] > 0`，后面的数只会更大，不可能再得到和为 `0` 的三元组。
+- **复杂度**：排序需要 $O(n\log n)$，枚举与双指针需要 $O(n^2)$，总体时间复杂度为 $O(n^2)$；忽略返回结果所占空间时，额外空间复杂度主要取决于排序实现。
+
+---
+
+### 题目 4：接雨水（LeetCode 42，困难）
+
+==原题==
+
+给定一个非负整数数组 `height`，每个元素表示宽度为 `1` 的柱子高度，计算下雨后能够接住的雨水总量。
+
+==答案（左右指针）==
+
+```cpp
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        int left = 0;
+        int right = height.size() - 1;
+        int leftMax = 0;
+        int rightMax = 0;
+        int answer = 0;
+
+        while (left < right) {
+            leftMax = max(leftMax, height[left]);
+            rightMax = max(rightMax, height[right]);
+
+            if (height[left] < height[right]) {
+                answer += leftMax - height[left];
+                left++;
+            } else {
+                answer += rightMax - height[right];
+                right--;
+            }
+        }
+
+        return answer;
+    }
+};
+```
+
+==解析==
+
+- **单个位置的雨水量**：当前位置能接的水由左侧最高柱和右侧最高柱中较矮的一侧决定，再减去当前位置的高度。
+- **维护边界最高值**：`leftMax` 和 `rightMax` 分别记录从两端遍历到当前位置时见过的最高柱。
+- **为什么移动较低的一侧**：当 `height[left] < height[right]` 时，右侧至少存在 `height[right]` 这根更高的柱子，因此左侧当前位置的水量可以由 `leftMax` 确定；另一种情况同理。
+- **不会得到负数**：更新最高值后再计算，所以 `leftMax >= height[left]`，`rightMax >= height[right]`。
+- **复杂度**：时间复杂度为 $O(n)$，额外空间复杂度为 $O(1)$。
