@@ -519,24 +519,3 @@ int main() {
 ```
 
 `using namespace std;` 不是 C++ 版的 `import`。它只是把命名空间中的名称引入当前作用域，头文件和大型项目中应避免全局使用。
-
-# 高频纠错
-
-| 容易写错 | 正确写法或说明 |
-| --- | --- |
-| Python 写 `true`、`false` | `True`、`False` |
-| C++ 写 `True`、`False` | `true`、`false` |
-| Python 写 `&&`、`\|\|`、`!` | `and`、`or`、`not` |
-| Python 写 `else if` | `elif` |
-| C++ 写 `elif` | `else if` |
-| Python 写 `x++` | `x += 1` |
-| 把 `^` 当乘方 | Python 用 `**`；C++ 用 `std::pow` 或自行计算 |
-| 认为 C++ 的 `5 / 2` 是 `2.5` | 两个整数相除得到 `2` |
-| C++ 写 `0 < x < 10` | 写成 `0 < x && x < 10` |
-| Python 用 `is` 比较字符串内容 | 使用 `==` |
-| C++ 用 `if (v)` 判断 `vector` 非空 | 使用 `if (!v.empty())` |
-| 认为 C++ `pop_back()` 会返回元素 | 先调用 `back()`，再调用 `pop_back()` |
-| C++ 使用 `a[-1]` 取最后一个元素 | 使用 `a.back()` |
-| 把 Python 类型注解当成强制类型声明 | 注解默认不进行运行时强制检查 |
-| 把 C++ `auto` 当成动态类型 | `auto` 只在编译期推导一次类型 |
-| 认为两门语言中的 `b = a` 都会复制对象 | Python 通常共享对象；C++ 值对象通常复制 |

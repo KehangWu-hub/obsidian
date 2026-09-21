@@ -765,64 +765,78 @@ public:
 
 - **示例**：输入 `nums = [-1, 0, 1, 2, -1, -4]`，输出 `[[-1, -1, 2], [-1, 0, 1]]`。
 
+这道题目不可以用set来实现去重
+
+`set<int>`：
+
+> **去掉元素重复，同时丢失重复次数**
+
+而 Three Sum 需要：
+
+> **保留重复次数，但最终答案不能重复**
+
 ==答案（排序 + 左右指针）==
 
 ```cpp
 class Solution {
 public:
     vector<vector<int>> threeSum(vector<int>& nums) {
-        vector<vector<int>> answer;
+        int n = nums.size();
         sort(nums.begin(), nums.end());
 
-        for (int i = 0; i < nums.size(); i++) {
-            if (nums[i] > 0) {
-                break;
-            }
+        vector<vector<int>> ans;
 
-            if (i > 0 && nums[i] == nums[i - 1]) {
+        // 枚举 a
+        for (int first = 0; first < n; ++first) {
+            // 需要和上一次枚举的数不同
+            if (first > 0 && nums[first] == nums[first - 1]) {
                 continue;
             }
 
-            int left = i + 1;
-            int right = nums.size() - 1;
+            // c 对应的指针初始指向数组最右端
+            int third = n - 1;
+            int target = -nums[first];
 
-            while (left < right) {
-                int sum = nums[i] + nums[left] + nums[right];
+            // 枚举 b
+            for (int second = first + 1; second < n; ++second) {
+                // 需要和上一次枚举的数不同
+                if (second > first + 1 && nums[second] == nums[second - 1]) {
+                    continue;
+                } //second > first + 1这个判定很重要，出错过，不能少
 
-                if (sum < 0) {
-                    left++;
-                } else if (sum > 0) {
-                    right--;
-                } else {
-                    answer.push_back({nums[i], nums[left], nums[right]});
-                    left++;
-                    right--;
+                // 保证 b 对应的指针在 c 对应的指针左侧
+                while (second < third && nums[second] + nums[third] > target) {
+                    --third; //关键：third只会一直向左走
+                } 
+                //注意这里要用while而不是if不然只会执行一次
+                //注意second < third必须要加，不然可能到不了下面的if (second == third)就已经越界了
 
-                    while (left < right && nums[left] == nums[left - 1]) {
-                        left++;
-                    }
+                // 指针重合后，后续不可能再找到满足条件的 c
+                if (second == third) {
+                    break;
+                }
 
-                    while (left < right && nums[right] == nums[right + 1]) {
-                        right--;
-                    }
+                if (nums[second] + nums[third] == target) {
+                    ans.push_back({nums[first], nums[second], nums[third]});
                 }
             }
         }
 
-        return answer;
+        return ans;
     }
 };
 ```
 
 ==解析==
 
-- **先排序**：排序后可以根据三数之和的大小决定移动方向，也便于跳过重复元素。
-- **固定第一个数**：枚举 `nums[i]`，再在 `i + 1` 到数组末尾之间寻找另外两个数。
-- **移动规则**：和小于 `0` 时，需要增大总和，因此移动 `left`；和大于 `0` 时，需要减小总和，因此移动 `right`。
-- **第一个数去重**：当 `nums[i] == nums[i - 1]` 时跳过当前元素，避免得到相同的三元组。
-- **另外两个数去重**：找到答案后先移动左右指针，再跳过与刚才相同的值。
-- **提前结束**：数组已经排序，如果 `nums[i] > 0`，后面的数只会更大，不可能再得到和为 `0` 的三元组。
-- **复杂度**：排序需要 $O(n\log n)$，枚举与双指针需要 $O(n^2)$，总体时间复杂度为 $O(n^2)$；忽略返回结果所占空间时，额外空间复杂度主要取决于排序实现。
+- **先排序**：排序后，数字从小到大排列，既能根据当前和移动 `third`，也方便跳过重复数字。
+- **枚举第一个数**：`first` 对应三元组中的 $a$。确定 `nums[first]` 后，另外两个数需要满足 `b+c=-a`，所以令 `target = -nums[first]`。
+- **枚举第二个数**：`second` 对应 $b$，从 `first + 1` 开始向右移动。
+- **移动第三个指针**：`third` 对应 $c$，初始位于数组末尾。当 `nums[second] + nums[third] > target` 时，当前和太大，因此将 `third` 向左移动。
+- **为什么 `third` 不需要重新回到末尾**：数组已经排序。随着 `second` 向右移动，`nums[second]` 只会变大，要使两数之和仍等于 `target`，`third` 只可能保持不动或继续向左移动。
+- **指针不能重合**：三个数必须来自不同下标，因此需要保证 `second < third`。两者重合后，后续的 `second` 只会继续增大，可以直接结束内层循环。
+- **去重**：`first` 与上一次取值相同时跳过；同一个 `first` 下，`second` 与上一次取值相同时也跳过，从而避免加入重复三元组。
+- **复杂度**：排序需要 $O(n\log n)$。每个 `first` 下，`second` 向右移动，`third` 只向左移动，因此查找需要 $O(n)$，总体时间复杂度为 $O(n^2)$。忽略返回结果所占空间时，额外空间复杂度主要取决于排序实现。
 
 ---
 
