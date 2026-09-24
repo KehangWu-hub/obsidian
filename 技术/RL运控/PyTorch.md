@@ -13,11 +13,13 @@ PyTorch 主要包含以下几部分：
 - `torch`：张量、数学运算、设备管理和自动微分。
 - `torch.nn`：神经网络层、激活函数和损失函数。
 - `torch.optim`：SGD、Adam 等优化器。
+- `torch.distributions`：概率分布，用于随机采样、计算概率密度等。
 - `torch.utils.data`：数据集和批量加载工具。
 
 ```python
 import torch
 from torch import nn
+from torch.distributions import Normal
 ```
 
 `torch` 是顶层包，`nn` 只是 `torch.nn` 的常用别名。因此，`nn.Linear` 的完整名称是 `torch.nn.Linear`。
@@ -290,6 +292,54 @@ target: [batch]
 ```
 
 logit 是未经归一化的类别分数。`CrossEntropyLoss` 内部已经包含 Softmax 相关计算，因此训练时应直接传入 logits，不要提前手动执行 Softmax。
+
+# torch.distributions 概率分布
+
+## Normal：正态分布（高斯分布）
+
+```python
+from torch.distributions import Normal
+```
+
+这句代码从 `torch.distributions` 模块中导入 **`Normal` 类**。给它均值和标准差，就能创建一个正态分布对象，再从中随机抽取数值。
+
+```python
+mean = torch.tensor([0.2])
+std = torch.tensor([0.1])
+
+distribution = Normal(mean, std)  # 创建分布对象
+action = distribution.sample()  # 从分布中抽取一个动作，返回 Tensor
+```
+
+均值 `0.2` 决定分布的中心，标准差 `0.1` 决定采样的分散程度。抽出的数值可能是 `0.15`，也可能是 `0.27`；标准差越大，探索范围通常越宽。传入的标准差需要大于零。
+
+这里可以分清三个东西：**`Normal` 是类，`distribution` 是分布对象，`action` 是采样得到的张量。**
+
+### 在机器人策略中怎样使用？
+
+在 [[技术/RL运控/rsl_rl库|rsl_rl]] 的 Actor 中，网络先给出动作均值，再用 `Normal` 建立分布并采样动作：
+
+```python
+mean = self.actor(observations)              # [环境数, 动作维度]
+distribution = Normal(mean, self.std)        # std 为 [动作维度]，自动广播
+actions = distribution.sample()             # [环境数, 动作维度]
+```
+
+例如 4096 个机器人、每个机器人 12 维动作，`actions` 的形状就是 `[4096, 12]`。每只机器人围绕自己的动作均值进行随机探索。
+
+### log_prob() 和 entropy()
+
+```python
+log_prob = distribution.log_prob(actions)   # 各动作维度的对数概率密度
+log_prob = log_prob.sum(dim=-1)              # 每个机器人的整组动作得到一个值
+
+entropy = distribution.entropy().sum(dim=-1) # 每个机器人动作分布的熵
+```
+
+- **`log_prob()`**：衡量这些动作在当前分布下的对数概率密度。PPO 用新旧策略的 `log_prob` 计算概率比，判断策略改变了多少。
+- **`entropy()`**：衡量分布的随机程度，用于鼓励探索。
+
+各动作维度按独立分布处理，整组动作的概率密度是各维的乘积，取对数后就变成相加，所以代码使用 `.sum(dim=-1)`。
 
 # 模型训练与使用
 

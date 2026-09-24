@@ -135,6 +135,34 @@ datetime:
     -  2018-02-17T15:02:31+08:00    #时间使用ISO 8601格式，时间和日期之间使用T连接，最后使用+代表时区
 ```
 
+# 在 Python 中读取 YAML
+
+YAML 文件写好后，可以用第三方库 **PyYAML** 的 `yaml.safe_load()` 把它读成 Python 数据。首次使用可安装：`pip install pyyaml`。
+
+假设 `config.yaml` 的内容是：
+
+```yaml
+robot:
+  name: go2
+  joints: [hip, thigh, calf]
+```
+
+用 Python 读取：
+
+```python
+import yaml
+
+with open("config.yaml", "r", encoding="utf-8") as f:
+    config = yaml.safe_load(f)
+
+print(config["robot"]["name"])    # go2
+print(config["robot"]["joints"])  # ['hip', 'thigh', 'calf']
+```
+
+`open()` 打开文件，`yaml.safe_load(f)` 解析文件内容；上例中，YAML 的键值对变成 Python 字典，列表变成 Python 列表。`with` 会在读完后关闭文件。
+
+这里的 `safe_load()` 是 **PyYAML 的 Python 函数**，不是 YAML 文件中的语法。它只构造受支持的安全类型，不会按 YAML 内容任意创建 Python 对象；读取配置时优先使用它。空文件会返回 `None`。
+
 # 结合ROS2 Control
 
 ## 控制器配置

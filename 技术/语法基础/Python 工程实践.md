@@ -716,3 +716,93 @@ torch.sum(y, dim=-1).shape
 最后一个维度中的 4 个数被求和，所以形状从 `(2, 3, 4)` 变成 `(2, 3)`。
 
 NumPy 中对应的参数通常叫 `axis`，例如 `np.sum(x, axis=-1)`。
+
+# `with` 语句：自动处理准备和收尾
+
+`with` 是 Python 的**上下文管理语法**。可以理解为：**进入一段代码前做好准备，离开时自动收尾。**
+
+## 例子：打开文件并读取内容
+
+```python
+with open("example.txt", "r", encoding="utf-8") as f:
+    content = f.read()
+
+print(content)
+```
+
+执行顺序是：
+
+**打开文件 → 通过 `f` 读取内容 → 离开缩进代码块时自动关闭文件 → 打印读到的内容。**
+
+逐个看语法：
+
+- `open(...)`：打开文件，得到文件对象。
+- `"r"`：以只读方式打开。
+- `encoding="utf-8"`：使用 UTF-8 解码文件内容。
+- `as f`：把进入上下文时返回的对象赋给变量 `f`，这里就是文件对象。
+- 冒号 `:` 和后面的缩进：划定由 `with` 管理的代码范围。
+- `f.read()`：读取内容，保存到 `content` 中。
+
+## 为什么要用 `with`？
+
+手动管理文件时，要记得关闭：
+
+```python
+f = open("example.txt", "r", encoding="utf-8")
+content = f.read()
+f.close()
+```
+
+如果读取途中发生异常，程序可能执行不到 `f.close()`。使用 `with` 后，只要成功进入代码块，离开时就会执行相应的收尾操作，正常结束、`return` 或抛出异常都会触发。
+
+对于文件，这个收尾操作就是关闭文件。异常本身仍可能继续向外抛出。
+
+## 缩进决定管理范围，变量仍然能用
+
+```python
+with open("example.txt", "r", encoding="utf-8") as f:
+    content = f.read()  # 在 with 里面，文件处于打开状态
+
+print(content)         # 在 with 外面，读取到的文字仍然能用
+print(f.closed)        # True，文件已经关闭
+```
+
+`with` 不会创建独立的变量作用域。离开代码块后，`content` 仍保存读到的文字，`f` 仍指向那个文件对象，只是文件已经关闭了。
+
+## `as` 可以省略吗？
+
+可以。需要拿到上下文提供的对象时，就写 `as 变量名`；只需要它管理进入和退出的行为时，可以省略。
+
+例如，临时调整小数计算的精度：
+
+```python
+from decimal import Decimal, getcontext, localcontext
+
+with localcontext() as ctx:
+    ctx.prec = 4
+    print(Decimal(1) / Decimal(3))  # 0.3333
+
+# 离开后，恢复进入前的小数计算上下文
+```
+
+再例如，用锁保护一段操作时，只需要进入时加锁、退出时释放锁：
+
+```python
+from threading import Lock
+
+lock = Lock()
+
+with lock:
+    print("在持有锁期间执行这段代码")
+
+# 离开后自动释放锁
+```
+
+## 底层怎样做到自动收尾？
+
+支持 `with` 的对象叫**上下文管理器**，它提供两个方法：
+
+- `__enter__()`：进入代码块时调用，其返回值交给 `as` 后面的变量。
+- `__exit__()`：离开代码块时调用，负责收尾，并可以处理异常。
+
+记住主线即可：**`with` 管进入和退出，缩进里写要做的事，具体准备与收尾由上下文管理器负责。**
